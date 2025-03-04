@@ -1,5 +1,5 @@
 modules = ["nodejs-18", "web"]
-run = "npm run start"
+run = "npm install && npm run start"
 
 [nix]
 channel = "stable-24_05"
