@@ -23,7 +23,23 @@ module.exports = {
         test: /\.ts$/,
         loader: "ts-loader",
         exclude: /node_modules/
-      }
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: { minimize: false },
+          },
+        ],
+      },
     ]
   },
   plugins: [
@@ -38,6 +54,6 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: [".ts", ".js"]
+    extensions: [".ts", ".js", '.json']
   }
 };
