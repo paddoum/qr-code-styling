@@ -337,6 +337,21 @@
       // Set up toggle for frame options
       document.getElementById('enableFrame').addEventListener('change', function() {
         document.getElementById('frameOptions').style.display = this.checked ? 'block' : 'none';
+        // Automatically update QR code when frame is toggled
+        document.getElementById('updateQr').click();
+      });
+      
+      // Make frame options update QR code on change
+      document.getElementById('frameColor').addEventListener('change', function() {
+        document.getElementById('updateQr').click();
+      });
+      
+      document.getElementById('frameStyle').addEventListener('change', function() {
+        document.getElementById('updateQr').click();
+      });
+      
+      document.getElementById('frameWidth').addEventListener('input', function() {
+        document.getElementById('updateQr').click();
       });
       
       function initQR() {
