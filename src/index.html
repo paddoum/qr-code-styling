@@ -342,8 +342,21 @@
         document.getElementById('updateQr').click();
       });
       
-      document.getElementById('frameWidth').addEventListener('input', function() {
+      document.getElementById('frameWidth').addEventListener('change', function() {
         document.getElementById('updateQr').click();
+      });
+      
+      // Make all frame-related inputs update QR when changed
+      document.getElementById('frameStyle').addEventListener('change', function() {
+        if (document.getElementById('enableFrame').checked) {
+          document.getElementById('updateQr').click();
+        }
+      });
+      
+      document.getElementById('frameColor').addEventListener('change', function() {
+        if (document.getElementById('enableFrame').checked) {
+          document.getElementById('updateQr').click();
+        }
       });
       
       // Initial QR code
@@ -491,7 +504,7 @@
           const frameStyle = document.getElementById('frameStyle').value;
           const frameWidth = parseInt(document.getElementById('frameWidth').value);
           
-          // Store frame info in options for afterRender callback
+          // Store frame info in options
           options._frameOptions = {
             enabled: true,
             color: frameColor,
@@ -499,12 +512,26 @@
             width: frameWidth
           };
           
-          // Add SVG frame after QR code is generated
+          // Add afterRender callback to add the frame
           options.afterRender = function(svg) {
+            // Get namespace for SVG elements
             const svgNS = "http://www.w3.org/2000/svg";
             const opts = options._frameOptions;
+            
+            // Get the QR code size
             const qrSize = parseInt(svg.getAttribute('width'));
             const frameSize = qrSize + (opts.width * 2);
+            
+            // Save original SVG contents
+            const originalContent = svg.innerHTML;
+            
+            // Clear SVG to start fresh
+            svg.innerHTML = '';
+            
+            // Update SVG size to accommodate the frame
+            svg.setAttribute('width', frameSize);
+            svg.setAttribute('height', frameSize);
+            svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
             
             // Create frame element based on style
             let frameElement;
@@ -522,7 +549,7 @@
               frameElement.setAttribute('stroke-width', opts.width);
             } else if (opts.style === 'dots') {
               // Create dotted frame with individual circles
-              const container = document.createElementNS(svgNS, 'g');
+              frameElement = document.createElementNS(svgNS, 'g');
               
               // Calculate number of dots per side based on frame width
               const spacing = opts.width * 3;  // Increased spacing for better appearance
@@ -537,7 +564,7 @@
                 topDot.setAttribute('cy', opts.width / 2);
                 topDot.setAttribute('r', dotRadius);
                 topDot.setAttribute('fill', opts.color);
-                container.appendChild(topDot);
+                frameElement.appendChild(topDot);
                 
                 // Bottom edge
                 const bottomDot = document.createElementNS(svgNS, 'circle');
@@ -545,7 +572,7 @@
                 bottomDot.setAttribute('cy', qrSize + opts.width * 1.5);
                 bottomDot.setAttribute('r', dotRadius);
                 bottomDot.setAttribute('fill', opts.color);
-                container.appendChild(bottomDot);
+                frameElement.appendChild(bottomDot);
                 
                 // Left edge (skip corners)
                 if (i > 0 && i < dots) {
@@ -554,7 +581,7 @@
                   leftDot.setAttribute('cy', opts.width + i * spacing);
                   leftDot.setAttribute('r', dotRadius);
                   leftDot.setAttribute('fill', opts.color);
-                  container.appendChild(leftDot);
+                  frameElement.appendChild(leftDot);
                 }
                 
                 // Right edge (skip corners)
@@ -564,11 +591,9 @@
                   rightDot.setAttribute('cy', opts.width + i * spacing);
                   rightDot.setAttribute('r', dotRadius);
                   rightDot.setAttribute('fill', opts.color);
-                  container.appendChild(rightDot);
+                  frameElement.appendChild(rightDot);
                 }
               }
-              
-              frameElement = container;
             } else {
               // Default solid frame
               frameElement = document.createElementNS(svgNS, 'rect');
@@ -581,30 +606,20 @@
               frameElement.setAttribute('stroke-width', opts.width);
             }
             
-            // Create a wrapper group for proper positioning
-            const wrapper = document.createElementNS(svgNS, 'g');
+            // Create a container group for frame
+            const frameGroup = document.createElementNS(svgNS, 'g');
+            frameGroup.appendChild(frameElement);
             
-            // Move existing content into the wrapper
-            while (svg.firstChild) {
-              wrapper.appendChild(svg.firstChild);
-            }
+            // Create a container group for QR content with proper translation
+            const contentGroup = document.createElementNS(svgNS, 'g');
+            contentGroup.setAttribute('transform', `translate(${opts.width}, ${opts.width})`);
             
-            // Add the frame as the first child in the wrapper
-            wrapper.insertBefore(frameElement, wrapper.firstChild);
+            // Add the frame group to SVG first
+            svg.appendChild(frameGroup);
             
-            // Add wrapper back to SVG
-            svg.appendChild(wrapper);
-            
-            // Update SVG size to accommodate the frame
-            svg.setAttribute('width', frameSize);
-            svg.setAttribute('height', frameSize);
-            svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
-            
-            // Ensure the QR content is properly centered in the frame
-            const qrContent = svg.querySelector('g') || svg.firstChild;
-            if (qrContent && qrContent.tagName === 'g') {
-              qrContent.setAttribute('transform', `translate(${opts.width}, ${opts.width})`);
-            }
+            // Add content group and fill with original content
+            svg.appendChild(contentGroup);
+            contentGroup.innerHTML = originalContent;
           };
         }
         
