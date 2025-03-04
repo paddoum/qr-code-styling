@@ -281,7 +281,6 @@
       </div>
       
       <div id="frameOptions" style="display: none;">
-        <p style="font-style: italic; font-size: 0.9em; margin-top: 0;">Click "Update QR Code" after changing frame options</p>
         <div class="form-group">
           <label for="frameColor">Frame Color:</label>
           <input type="color" id="frameColor" value="#000000">
@@ -300,8 +299,6 @@
         </div>
       </div>
     </div>
-    
-    <!-- Controls moved to preview container -->
   </div>
   
   <div class="preview-container">
@@ -315,14 +312,9 @@
     </div>
   </div>
 
+  <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Create a script element for QR Code Styling library
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js';
-      script.onload = initQR;
-      document.head.appendChild(script);
-      
       // Set up toggle for gradient options
       document.getElementById('useDotsGradient').addEventListener('change', function() {
         document.getElementById('dotsSolidColor').style.display = this.checked ? 'none' : 'block';
@@ -354,289 +346,284 @@
         document.getElementById('updateQr').click();
       });
       
-      function initQR() {
-        // Initial QR code
-        const qrCode = new QRCodeStyling({
-          width: 300,
-          height: 300,
+      // Initial QR code
+      const qrCode = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        type: "svg",
+        data: "https://replit.com",
+        margin: 10,
+        qrOptions: {
+          typeNumber: 0,
+          mode: "Byte",
+          errorCorrectionLevel: "Q"
+        },
+        dotsOptions: {
+          type: "dots",
+          color: "#000000"
+        },
+        backgroundOptions: {
+          color: "#ffffff",
+        },
+        cornersSquareOptions: {
+          type: "square",
+          color: "#000000"
+        },
+        cornersDotOptions: {
+          type: "square",
+          color: "#000000"
+        }
+      });
+      
+      // Display the QR code
+      qrCode.append(document.getElementById("canvas"));
+      
+      // Event handlers
+      document.getElementById('updateQr').addEventListener('click', function() {
+        // Get all parameters from form
+        const data = document.getElementById('data').value;
+        const width = parseInt(document.getElementById('width').value);
+        const height = parseInt(document.getElementById('height').value);
+        const margin = parseInt(document.getElementById('margin').value);
+        const dotsType = document.getElementById('dotsType').value;
+        const dotsColor = document.getElementById('dotsColor').value;
+        const backgroundColor = document.getElementById('backgroundColor').value;
+        const cornersSquareType = document.getElementById('cornersSquareType').value;
+        const cornersSquareColor = document.getElementById('cornersSquareColor').value;
+        const cornersDotType = document.getElementById('cornersDotType').value;
+        const cornersDotColor = document.getElementById('cornersDotColor').value;
+        const imageUrl = document.getElementById('imageUrl').value;
+        const imageMargin = parseInt(document.getElementById('imageMargin').value);
+        const imageSize = parseFloat(document.getElementById('imageSize').value);
+        const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
+        
+        // Create options object
+        const options = {
+          width,
+          height,
           type: "svg",
-          data: "https://replit.com",
-          margin: 10,
+          data,
+          margin,
           qrOptions: {
             typeNumber: 0,
             mode: "Byte",
-            errorCorrectionLevel: "Q"
-          },
-          dotsOptions: {
-            type: "dots",
-            color: "#000000"
-          },
-          backgroundOptions: {
-            color: "#ffffff",
+            errorCorrectionLevel
           },
           cornersSquareOptions: {
-            type: "square",
-            color: "#000000"
+            type: cornersSquareType,
+            color: cornersSquareColor
           },
           cornersDotOptions: {
-            type: "square",
-            color: "#000000"
+            type: cornersDotType,
+            color: cornersDotColor
           }
-        });
+        };
         
-        // Display the QR code
-        qrCode.append(document.getElementById("canvas"));
-        
-        // Event handlers
-        document.getElementById('updateQr').addEventListener('click', function() {
-          // Get all parameters from form
-          const data = document.getElementById('data').value;
-          const width = parseInt(document.getElementById('width').value);
-          const height = parseInt(document.getElementById('height').value);
-          const margin = parseInt(document.getElementById('margin').value);
-          const dotsType = document.getElementById('dotsType').value;
-          const dotsColor = document.getElementById('dotsColor').value;
-          const backgroundColor = document.getElementById('backgroundColor').value;
-          const cornersSquareType = document.getElementById('cornersSquareType').value;
-          const cornersSquareColor = document.getElementById('cornersSquareColor').value;
-          const cornersDotType = document.getElementById('cornersDotType').value;
-          const cornersDotColor = document.getElementById('cornersDotColor').value;
-          const imageUrl = document.getElementById('imageUrl').value;
-          const imageMargin = parseInt(document.getElementById('imageMargin').value);
-          const imageSize = parseFloat(document.getElementById('imageSize').value);
-          const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
+        // Handle dots options with gradient support
+        if (document.getElementById('useDotsGradient').checked) {
+          const gradientType = document.getElementById('dotsGradientType').value;
+          const color1 = document.getElementById('dotsGradientColor1').value;
+          const color2 = document.getElementById('dotsGradientColor2').value;
+          const rotation = parseInt(document.getElementById('dotsGradientRotation').value);
           
-          // Create options object
-          const options = {
-            width,
-            height,
-            type: "svg",
-            data,
-            margin,
-            qrOptions: {
-              typeNumber: 0,
-              mode: "Byte",
-              errorCorrectionLevel
-            },
-            cornersSquareOptions: {
-              type: cornersSquareType,
-              color: cornersSquareColor
-            },
-            cornersDotOptions: {
-              type: cornersDotType,
-              color: cornersDotColor
+          options.dotsOptions = {
+            type: dotsType,
+            gradient: {
+              type: gradientType,
+              rotation,
+              colorStops: [
+                { offset: 0, color: color1 },
+                { offset: 1, color: color2 }
+              ]
             }
           };
+        } else {
+          options.dotsOptions = {
+            type: dotsType,
+            color: dotsColor
+          };
+        }
+        
+        // Handle background options with gradient support
+        if (document.getElementById('useBackgroundGradient').checked) {
+          const gradientType = document.getElementById('backgroundGradientType').value;
+          const color1 = document.getElementById('backgroundGradientColor1').value;
+          const color2 = document.getElementById('backgroundGradientColor2').value;
+          const rotation = parseInt(document.getElementById('backgroundGradientRotation').value);
           
-          // Handle dots options with gradient support
-          if (document.getElementById('useDotsGradient').checked) {
-            const gradientType = document.getElementById('dotsGradientType').value;
-            const color1 = document.getElementById('dotsGradientColor1').value;
-            const color2 = document.getElementById('dotsGradientColor2').value;
-            const rotation = parseInt(document.getElementById('dotsGradientRotation').value);
-            
-            options.dotsOptions = {
-              type: dotsType,
-              gradient: {
-                type: gradientType,
-                rotation,
-                colorStops: [
-                  { offset: 0, color: color1 },
-                  { offset: 1, color: color2 }
-                ]
-              }
-            };
-          } else {
-            options.dotsOptions = {
-              type: dotsType,
-              color: dotsColor
-            };
-          }
+          options.backgroundOptions = {
+            gradient: {
+              type: gradientType,
+              rotation,
+              colorStops: [
+                { offset: 0, color: color1 },
+                { offset: 1, color: color2 }
+              ]
+            }
+          };
+        } else {
+          options.backgroundOptions = {
+            color: backgroundColor
+          };
+        }
+        
+        // Add image options if URL is provided
+        if (imageUrl && imageUrl.trim() !== '') {
+          // Use a CORS proxy if the checkbox is checked
+          const useProxy = document.getElementById('useProxy').checked;
+          const finalImageUrl = useProxy ? 
+            `https://cors-anywhere.herokuapp.com/${imageUrl}` : imageUrl;
           
-          // Handle background options with gradient support
-          if (document.getElementById('useBackgroundGradient').checked) {
-            const gradientType = document.getElementById('backgroundGradientType').value;
-            const color1 = document.getElementById('backgroundGradientColor1').value;
-            const color2 = document.getElementById('backgroundGradientColor2').value;
-            const rotation = parseInt(document.getElementById('backgroundGradientRotation').value);
-            
-            options.backgroundOptions = {
-              gradient: {
-                type: gradientType,
-                rotation,
-                colorStops: [
-                  { offset: 0, color: color1 },
-                  { offset: 1, color: color2 }
-                ]
-              }
-            };
-          } else {
-            options.backgroundOptions = {
-              color: backgroundColor
-            };
-          }
+          options.image = finalImageUrl;
+          options.imageOptions = {
+            crossOrigin: "anonymous",
+            margin: imageMargin,
+            imageSize: imageSize,
+            hideBackgroundDots: true
+          };
           
-          // Add image options if URL is provided
-          if (imageUrl && imageUrl.trim() !== '') {
-            // Use a CORS proxy if the checkbox is checked
-            const useProxy = document.getElementById('useProxy').checked;
-            const finalImageUrl = useProxy ? 
-              `https://cors-anywhere.herokuapp.com/${imageUrl}` : imageUrl;
-            
-            options.image = finalImageUrl;
-            options.imageOptions = {
-              crossOrigin: "anonymous",
-              margin: imageMargin,
-              imageSize: imageSize,
-              hideBackgroundDots: true
-            };
-            
-            console.log("Using image URL:", finalImageUrl);
-          }
+          console.log("Using image URL:", finalImageUrl);
+        }
+        
+        // Add frame if enabled
+        if (document.getElementById('enableFrame').checked) {
+          const frameColor = document.getElementById('frameColor').value;
+          const frameStyle = document.getElementById('frameStyle').value;
+          const frameWidth = parseInt(document.getElementById('frameWidth').value);
           
-          // Add frame if enabled
-          if (document.getElementById('enableFrame').checked) {
-            const frameColor = document.getElementById('frameColor').value;
-            const frameStyle = document.getElementById('frameStyle').value;
-            const frameWidth = parseInt(document.getElementById('frameWidth').value);
+          // Store frame info in options for afterRender callback
+          options._frameOptions = {
+            enabled: true,
+            color: frameColor,
+            style: frameStyle,
+            width: frameWidth
+          };
+          
+          // Add SVG frame after QR code is generated
+          options.afterRender = function(svg) {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const opts = this._frameOptions;
+            const qrSize = parseInt(svg.getAttribute('width'));
+            const frameSize = qrSize + (opts.width * 2);
             
-            // Store frame info in options for afterRender callback
-            options._frameOptions = {
-              enabled: true,
-              color: frameColor,
-              style: frameStyle,
-              width: frameWidth
-            };
+            // Create frame element based on style
+            let frameElement;
             
-            // Add SVG frame after QR code is generated
-            options.afterRender = function(svg) {
-              const svgNS = "http://www.w3.org/2000/svg";
-              const opts = this._frameOptions;
-              const qrSize = parseInt(svg.getAttribute('width'));
-              const frameSize = qrSize + (opts.width * 2);
+            if (opts.style === 'rounded') {
+              frameElement = document.createElementNS(svgNS, 'rect');
+              frameElement.setAttribute('x', opts.width / 2);
+              frameElement.setAttribute('y', opts.width / 2);
+              frameElement.setAttribute('width', qrSize + opts.width);
+              frameElement.setAttribute('height', qrSize + opts.width);
+              frameElement.setAttribute('rx', opts.width * 2);
+              frameElement.setAttribute('ry', opts.width * 2);
+              frameElement.setAttribute('fill', 'none');
+              frameElement.setAttribute('stroke', opts.color);
+              frameElement.setAttribute('stroke-width', opts.width);
+            } else if (opts.style === 'dots') {
+              // Create dotted frame with individual circles
+              const container = document.createElementNS(svgNS, 'g');
               
-              // Create frame element based on style
-              let frameElement;
+              // Calculate number of dots per side based on frame width
+              const spacing = opts.width * 2;
+              const dotRadius = opts.width / 2;
+              const dots = Math.floor(qrSize / spacing);
               
-              if (opts.style === 'rounded') {
-                frameElement = document.createElementNS(svgNS, 'rect');
-                frameElement.setAttribute('x', opts.width / 2);
-                frameElement.setAttribute('y', opts.width / 2);
-                frameElement.setAttribute('width', qrSize + opts.width);
-                frameElement.setAttribute('height', qrSize + opts.width);
-                frameElement.setAttribute('rx', opts.width * 2);
-                frameElement.setAttribute('ry', opts.width * 2);
-                frameElement.setAttribute('fill', 'none');
-                frameElement.setAttribute('stroke', opts.color);
-                frameElement.setAttribute('stroke-width', opts.width);
-              } else if (opts.style === 'dots') {
-                // Create dotted frame with individual circles
-                const container = document.createElementNS(svgNS, 'g');
+              // Draw dots on all four sides
+              for (let i = 0; i <= dots; i++) {
+                // Top edge
+                const topDot = document.createElementNS(svgNS, 'circle');
+                topDot.setAttribute('cx', opts.width + i * spacing);
+                topDot.setAttribute('cy', opts.width / 2);
+                topDot.setAttribute('r', dotRadius);
+                topDot.setAttribute('fill', opts.color);
+                container.appendChild(topDot);
                 
-                // Calculate number of dots per side based on frame width
-                const spacing = opts.width * 2;
-                const dotRadius = opts.width / 2;
-                const dots = Math.floor(qrSize / spacing);
+                // Bottom edge
+                const bottomDot = document.createElementNS(svgNS, 'circle');
+                bottomDot.setAttribute('cx', opts.width + i * spacing);
+                bottomDot.setAttribute('cy', qrSize + opts.width * 1.5);
+                bottomDot.setAttribute('r', dotRadius);
+                bottomDot.setAttribute('fill', opts.color);
+                container.appendChild(bottomDot);
                 
-                // Draw dots on all four sides
-                for (let i = 0; i <= dots; i++) {
-                  // Top edge
-                  const topDot = document.createElementNS(svgNS, 'circle');
-                  topDot.setAttribute('cx', opts.width + i * spacing);
-                  topDot.setAttribute('cy', opts.width / 2);
-                  topDot.setAttribute('r', dotRadius);
-                  topDot.setAttribute('fill', opts.color);
-                  container.appendChild(topDot);
-                  
-                  // Bottom edge
-                  const bottomDot = document.createElementNS(svgNS, 'circle');
-                  bottomDot.setAttribute('cx', opts.width + i * spacing);
-                  bottomDot.setAttribute('cy', qrSize + opts.width * 1.5);
-                  bottomDot.setAttribute('r', dotRadius);
-                  bottomDot.setAttribute('fill', opts.color);
-                  container.appendChild(bottomDot);
-                  
-                  // Left edge (skip corners)
-                  if (i > 0 && i < dots) {
-                    const leftDot = document.createElementNS(svgNS, 'circle');
-                    leftDot.setAttribute('cx', opts.width / 2);
-                    leftDot.setAttribute('cy', opts.width + i * spacing);
-                    leftDot.setAttribute('r', dotRadius);
-                    leftDot.setAttribute('fill', opts.color);
-                    container.appendChild(leftDot);
-                  }
-                  
-                  // Right edge (skip corners)
-                  if (i > 0 && i < dots) {
-                    const rightDot = document.createElementNS(svgNS, 'circle');
-                    rightDot.setAttribute('cx', qrSize + opts.width * 1.5);
-                    rightDot.setAttribute('cy', opts.width + i * spacing);
-                    rightDot.setAttribute('r', dotRadius);
-                    rightDot.setAttribute('fill', opts.color);
-                    container.appendChild(rightDot);
-                  }
+                // Left edge (skip corners)
+                if (i > 0 && i < dots) {
+                  const leftDot = document.createElementNS(svgNS, 'circle');
+                  leftDot.setAttribute('cx', opts.width / 2);
+                  leftDot.setAttribute('cy', opts.width + i * spacing);
+                  leftDot.setAttribute('r', dotRadius);
+                  leftDot.setAttribute('fill', opts.color);
+                  container.appendChild(leftDot);
                 }
                 
-                frameElement = container;
-              } else {
-                // Default solid frame
-                frameElement = document.createElementNS(svgNS, 'rect');
-                frameElement.setAttribute('x', opts.width / 2);
-                frameElement.setAttribute('y', opts.width / 2);
-                frameElement.setAttribute('width', qrSize + opts.width);
-                frameElement.setAttribute('height', qrSize + opts.width);
-                frameElement.setAttribute('fill', 'none');
-                frameElement.setAttribute('stroke', opts.color);
-                frameElement.setAttribute('stroke-width', opts.width);
+                // Right edge (skip corners)
+                if (i > 0 && i < dots) {
+                  const rightDot = document.createElementNS(svgNS, 'circle');
+                  rightDot.setAttribute('cx', qrSize + opts.width * 1.5);
+                  rightDot.setAttribute('cy', opts.width + i * spacing);
+                  rightDot.setAttribute('r', dotRadius);
+                  rightDot.setAttribute('fill', opts.color);
+                  container.appendChild(rightDot);
+                }
               }
               
-              // Create a wrapper group for proper positioning
-              const wrapper = document.createElementNS(svgNS, 'g');
-              
-              // Move existing content into the wrapper
-              while (svg.firstChild) {
-                wrapper.appendChild(svg.firstChild);
-              }
-              
-              // Add the frame as the first child in the wrapper
-              wrapper.insertBefore(frameElement, wrapper.firstChild);
-              
-              // Add wrapper back to SVG
-              svg.appendChild(wrapper);
-              
-              // Update SVG size to accommodate the frame
-              svg.setAttribute('width', frameSize);
-              svg.setAttribute('height', frameSize);
-              svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
-            };
-          }
-          
-          // For debugging image loading issues
-          console.log("QR Code options:", JSON.stringify(options));
-          
-          // Create new QR code with updated options
-          const newQrCode = new QRCodeStyling(options);
-          
-          // Clear previous and append new
-          const canvas = document.getElementById("canvas");
-          canvas.innerHTML = "";
-          newQrCode.append(canvas);
-          
-          // Store for download button
-          window.currentQrCode = newQrCode;
-        });
+              frameElement = container;
+            } else {
+              // Default solid frame
+              frameElement = document.createElementNS(svgNS, 'rect');
+              frameElement.setAttribute('x', opts.width / 2);
+              frameElement.setAttribute('y', opts.width / 2);
+              frameElement.setAttribute('width', qrSize + opts.width);
+              frameElement.setAttribute('height', qrSize + opts.width);
+              frameElement.setAttribute('fill', 'none');
+              frameElement.setAttribute('stroke', opts.color);
+              frameElement.setAttribute('stroke-width', opts.width);
+            }
+            
+            // Create a wrapper group for proper positioning
+            const wrapper = document.createElementNS(svgNS, 'g');
+            
+            // Move existing content into the wrapper
+            while (svg.firstChild) {
+              wrapper.appendChild(svg.firstChild);
+            }
+            
+            // Add the frame as the first child in the wrapper
+            wrapper.insertBefore(frameElement, wrapper.firstChild);
+            
+            // Add wrapper back to SVG
+            svg.appendChild(wrapper);
+            
+            // Update SVG size to accommodate the frame
+            svg.setAttribute('width', frameSize);
+            svg.setAttribute('height', frameSize);
+            svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
+          };
+        }
         
-        document.getElementById('downloadQr').addEventListener('click', function() {
-          const qr = window.currentQrCode || qrCode;
-          qr.download({
-            extension: "svg",
-            name: "qr-code"
-          });
-        });
+        // Create new QR code with updated options
+        const newQrCode = new QRCodeStyling(options);
+        
+        // Clear previous and append new
+        const canvas = document.getElementById("canvas");
+        canvas.innerHTML = "";
+        newQrCode.append(canvas);
         
         // Store for download button
-        window.currentQrCode = qrCode;
-      }
+        window.currentQrCode = newQrCode;
+      });
+      
+      document.getElementById('downloadQr').addEventListener('click', function() {
+        const qr = window.currentQrCode || qrCode;
+        qr.download({
+          extension: "svg",
+          name: "qr-code"
+        });
+      });
+      
+      // Store for download button
+      window.currentQrCode = qrCode;
     });
   </script>
 </body>

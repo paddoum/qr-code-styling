@@ -1,18 +1,23 @@
-const { merge } = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const commonConfig = require('./webpack.config.common.js');
 
-module.exports = merge(commonConfig, {
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ESLintPlugin = require('eslint-webpack-plugin');
+
+module.exports = {
   mode: 'development',
+  entry: './src/index.html',
   devServer: {
+    static: {
+      directory: path.join(__dirname, 'src'),
+    },
+    port: 8080,
     allowedHosts: 'all',
   },
-  devtool: "inline-source-map",
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
-      inject: 'head',
-      scriptLoading: 'blocking',
-    })
+      filename: 'index.html'
+    }),
+    new ESLintPlugin()
   ]
-});
+};
