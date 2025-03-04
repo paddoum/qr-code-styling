@@ -2,11 +2,32 @@
   "name": "qr-code-styling-app",
   "version": "1.0.0",
   "description": "QR Code Styling App",
-  "main": "index.js",
   "scripts": {
-    "start": "http-server src -p 8080 --cors"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
-    "http-server": "^14.1.1"
+    "autoprefixer": "^10.4.14",
+    "http-server": "^14.1.1",
+    "postcss": "^8.4.24",
+    "qr-code-styling": "^1.9.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "tailwindcss": "^3.3.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
