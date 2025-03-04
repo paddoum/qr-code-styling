@@ -17,7 +17,7 @@ module.exports = merge(commonConfig, {
       directory: path.join(__dirname, 'src'),
     },
     compress: true,
-    port: 3000,
+    port: 8080,
     hot: true,
     open: true,
   },

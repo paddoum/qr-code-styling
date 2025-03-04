@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require('path');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
@@ -20,30 +20,27 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        loader: "ts-loader",
-        exclude: /node_modules/
-      },
-      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-        },
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.html$/,
         use: [
           {
             loader: 'html-loader',
-            options: { minimize: false },
-          },
-        ],
-      },
+            options: { minimize: false }
+          }
+        ]
+      }
     ]
   },
   plugins: [
-    new ESLintPlugin(),
+    new ESLintPlugin({
+      extensions: ['js']
+    }),
     new FileManagerPlugin({
       events: {
         onEnd: {
@@ -54,6 +51,6 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: [".ts", ".js", '.json']
+    extensions: ['.js', '.json']
   }
 };

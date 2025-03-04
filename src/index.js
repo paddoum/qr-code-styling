@@ -1,6 +1,8 @@
 
-// Import dependencies
-import 'qr-code-styling';
+// Import QR Code Styling
+import QRCodeStyling from 'qr-code-styling';
 
-// This file serves as the entry point for webpack
+// Make QRCodeStyling available globally
+window.QRCodeStyling = QRCodeStyling;
+
 console.log('QR Code Styling App initialized');
