@@ -148,6 +148,66 @@
     </div>
     
     <div class="form-section">
+      <h3>Corners Square Options</h3>
+      <div class="form-group">
+        <label for="cornersSquareType">Type:</label>
+        <select id="cornersSquareType">
+          <option value="square" selected>Square</option>
+          <option value="dot">Dot</option>
+          <option value="extra-rounded">Extra Rounded</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cornersSquareColor">Color:</label>
+        <input type="color" id="cornersSquareColor" value="#000000">
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Corners Dot Options</h3>
+      <div class="form-group">
+        <label for="cornersDotType">Type:</label>
+        <select id="cornersDotType">
+          <option value="square" selected>Square</option>
+          <option value="dot">Dot</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cornersDotColor">Color:</label>
+        <input type="color" id="cornersDotColor" value="#000000">
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Image Options</h3>
+      <div class="form-group">
+        <label for="imageUrl">Image URL:</label>
+        <input type="text" id="imageUrl" placeholder="https://example.com/logo.png">
+      </div>
+      <div class="form-group">
+        <label for="imageMargin">Margin:</label>
+        <input type="number" id="imageMargin" value="5" min="0" max="50">
+      </div>
+      <div class="form-group">
+        <label for="imageSize">Size (0.0-1.0):</label>
+        <input type="number" id="imageSize" value="0.4" min="0.0" max="1.0" step="0.1">
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Error Correction Level</h3>
+      <div class="form-group">
+        <label for="errorCorrectionLevel">Level:</label>
+        <select id="errorCorrectionLevel">
+          <option value="L">L - Low (7%)</option>
+          <option value="M">M - Medium (15%)</option>
+          <option value="Q" selected>Q - Quartile (25%)</option>
+          <option value="H">H - High (30%)</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="form-section">
       <h3>Controls</h3>
       <button id="updateQr">Update QR Code</button>
       <button id="downloadQr">Download QR Code</button>
@@ -210,14 +270,27 @@
           const dotsType = document.getElementById('dotsType').value;
           const dotsColor = document.getElementById('dotsColor').value;
           const backgroundColor = document.getElementById('backgroundColor').value;
+          const cornersSquareType = document.getElementById('cornersSquareType').value;
+          const cornersSquareColor = document.getElementById('cornersSquareColor').value;
+          const cornersDotType = document.getElementById('cornersDotType').value;
+          const cornersDotColor = document.getElementById('cornersDotColor').value;
+          const imageUrl = document.getElementById('imageUrl').value;
+          const imageMargin = parseInt(document.getElementById('imageMargin').value);
+          const imageSize = parseFloat(document.getElementById('imageSize').value);
+          const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
           
-          // Create new QR code with updated options
-          const newQrCode = new QRCodeStyling({
+          // Create options object
+          const options = {
             width,
             height,
             type: "svg",
             data,
             margin,
+            qrOptions: {
+              typeNumber: 0,
+              mode: "Byte",
+              errorCorrectionLevel
+            },
             dotsOptions: {
               type: dotsType,
               color: dotsColor
@@ -226,14 +299,27 @@
               color: backgroundColor
             },
             cornersSquareOptions: {
-              type: "square",
-              color: dotsColor
+              type: cornersSquareType,
+              color: cornersSquareColor
             },
             cornersDotOptions: {
-              type: "square",
-              color: dotsColor
+              type: cornersDotType,
+              color: cornersDotColor
             }
-          });
+          };
+          
+          // Add image options if URL is provided
+          if (imageUrl && imageUrl.trim() !== '') {
+            options.image = imageUrl;
+            options.imageOptions = {
+              crossOrigin: "anonymous",
+              margin: imageMargin,
+              imageSize: imageSize
+            };
+          }
+          
+          // Create new QR code with updated options
+          const newQrCode = new QRCodeStyling(options);
           
           // Clear previous and append new
           const canvas = document.getElementById("canvas");
