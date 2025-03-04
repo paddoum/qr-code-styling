@@ -502,7 +502,7 @@
           // Add SVG frame after QR code is generated
           options.afterRender = function(svg) {
             const svgNS = "http://www.w3.org/2000/svg";
-            const opts = this._frameOptions;
+            const opts = options._frameOptions;
             const qrSize = parseInt(svg.getAttribute('width'));
             const frameSize = qrSize + (opts.width * 2);
             
@@ -525,8 +525,8 @@
               const container = document.createElementNS(svgNS, 'g');
               
               // Calculate number of dots per side based on frame width
-              const spacing = opts.width * 2;
-              const dotRadius = opts.width / 2;
+              const spacing = opts.width * 3;  // Increased spacing for better appearance
+              const dotRadius = opts.width / 1.5;  // Slightly larger dots
               const dots = Math.floor(qrSize / spacing);
               
               // Draw dots on all four sides
@@ -599,6 +599,12 @@
             svg.setAttribute('width', frameSize);
             svg.setAttribute('height', frameSize);
             svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
+            
+            // Ensure the QR content is properly centered in the frame
+            const qrContent = svg.querySelector('g') || svg.firstChild;
+            if (qrContent && qrContent.tagName === 'g') {
+              qrContent.setAttribute('transform', `translate(${opts.width}, ${opts.width})`);
+            }
           };
         }
         
