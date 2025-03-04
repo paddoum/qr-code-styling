@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,43 +12,43 @@
       display: flex;
       gap: 20px;
     }
-    
+
     .config-container {
       flex: 1;
       overflow-y: auto;
       max-height: 100vh;
     }
-    
+
     .preview-container {
       flex: 1;
       position: sticky;
       top: 20px;
       text-align: center;
     }
-    
+
     .form-section {
       margin-bottom: 20px;
       padding: 15px;
       border: 1px solid #ddd;
       border-radius: 5px;
     }
-    
+
     .form-section h3 {
       margin-top: 0;
       border-bottom: 1px solid #eee;
       padding-bottom: 10px;
     }
-    
+
     .form-group {
       margin-bottom: 10px;
     }
-    
+
     label {
       display: block;
       margin-bottom: 5px;
       font-weight: bold;
     }
-    
+
     input, select, textarea {
       width: 100%;
       padding: 8px;
@@ -57,21 +56,21 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    
+
     input[type="color"] {
       height: 40px;
     }
-    
+
     input[type="checkbox"] {
       width: auto;
       margin-right: 5px;
     }
-    
+
     .checkbox-label {
       display: flex;
       align-items: center;
     }
-    
+
     button {
       background-color: #4CAF50;
       border: none;
@@ -85,22 +84,22 @@
       cursor: pointer;
       border-radius: 4px;
     }
-    
+
     textarea {
       height: 100px;
       font-family: monospace;
     }
-    
+
     .custom-file-upload {
       display: flex;
       align-items: center;
       margin-top: 5px;
     }
-    
+
     .custom-file-upload input[type="file"] {
       display: none;
     }
-    
+
     .custom-file-upload button {
       background-color: #4CAF50;
       color: white;
@@ -110,7 +109,7 @@
       cursor: pointer;
       margin-right: 10px;
     }
-    
+
     #fileName {
       color: #666;
     }
@@ -119,30 +118,30 @@
 <body>
   <div class="config-container">
     <h1>QR Code Configuration</h1>
-    
+
     <div class="form-section">
       <h3>Basic Options</h3>
       <div class="form-group">
         <label for="data">QR Code Content:</label>
         <textarea id="data">https://replit.com</textarea>
       </div>
-      
+
       <div class="form-group">
         <label for="width">Width:</label>
         <input type="number" id="width" value="300" min="100" max="1000">
       </div>
-      
+
       <div class="form-group">
         <label for="height">Height:</label>
         <input type="number" id="height" value="300" min="100" max="1000">
       </div>
-      
+
       <div class="form-group">
         <label for="margin">Margin:</label>
         <input type="number" id="margin" value="10" min="0" max="100">
       </div>
     </div>
-    
+
     <div class="form-section">
       <h3>Dots Options</h3>
       <div class="form-group">
@@ -156,20 +155,20 @@
           <option value="extra-rounded">Extra Rounded</option>
         </select>
       </div>
-      
+
       <div class="form-group">
         <label class="checkbox-label">
           <input type="checkbox" id="useDotsGradient"> Use Gradient
         </label>
       </div>
-      
+
       <div id="dotsSolidColor">
         <div class="form-group">
           <label for="dotsColor">Color:</label>
           <input type="color" id="dotsColor" value="#000000">
         </div>
       </div>
-      
+
       <div id="dotsGradientColors" style="display: none;">
         <div class="form-group">
           <label for="dotsGradientType">Gradient Type:</label>
@@ -192,7 +191,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="form-section">
       <h3>Background Options</h3>
       <div class="form-group">
@@ -200,14 +199,14 @@
           <input type="checkbox" id="useBackgroundGradient"> Use Gradient
         </label>
       </div>
-      
+
       <div id="backgroundSolidColor">
         <div class="form-group">
           <label for="backgroundColor">Color:</label>
           <input type="color" id="backgroundColor" value="#ffffff">
         </div>
       </div>
-      
+
       <div id="backgroundGradientColors" style="display: none;">
         <div class="form-group">
           <label for="backgroundGradientType">Gradient Type:</label>
@@ -230,7 +229,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="form-section">
       <h3>Corners Square Options</h3>
       <div class="form-group">
@@ -246,7 +245,7 @@
         <input type="color" id="cornersSquareColor" value="#000000">
       </div>
     </div>
-    
+
     <div class="form-section">
       <h3>Corners Dot Options</h3>
       <div class="form-group">
@@ -261,7 +260,7 @@
         <input type="color" id="cornersDotColor" value="#000000">
       </div>
     </div>
-    
+
     <div class="form-section">
       <h3>Image Options</h3>
       <div class="form-group">
@@ -290,7 +289,7 @@
         <input type="number" id="imageSize" value="0.4" min="0.0" max="1.0" step="0.1">
       </div>
     </div>
-    
+
     <div class="form-section">
       <h3>Error Correction Level</h3>
       <div class="form-group">
@@ -303,41 +302,13 @@
         </select>
       </div>
     </div>
-    
-    <div class="form-section">
-      <h3>Frame Options</h3>
-      <div class="form-group">
-        <label class="checkbox-label">
-          <input type="checkbox" id="enableFrame"> Add Frame to QR Code
-        </label>
-      </div>
-      
-      <div id="frameOptions" style="display: none;">
-        <div class="form-group">
-          <label for="frameColor">Frame Color:</label>
-          <input type="color" id="frameColor" value="#000000">
-        </div>
-        <div class="form-group">
-          <label for="frameStyle">Frame Style:</label>
-          <select id="frameStyle">
-            <option value="solid">Solid</option>
-            <option value="rounded">Rounded</option>
-            <option value="dots">Dots</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="frameWidth">Frame Width:</label>
-          <input type="number" id="frameWidth" value="5" min="1" max="20">
-        </div>
-      </div>
-    </div>
   </div>
-  
+
   <div class="preview-container">
     <h2>QR Code Preview</h2>
 
     <div id="canvas"></div>
-    
+
     <div class="preview-controls" style="margin-top: 20px;">
       <button id="updateQr">Update QR Code</button>
       <button id="downloadQr">Download QR Code</button>
@@ -352,60 +323,28 @@
         document.getElementById('dotsSolidColor').style.display = this.checked ? 'none' : 'block';
         document.getElementById('dotsGradientColors').style.display = this.checked ? 'block' : 'none';
       });
-      
+
+      // Set up toggle for background options with gradient support
       document.getElementById('useBackgroundGradient').addEventListener('change', function() {
         document.getElementById('backgroundSolidColor').style.display = this.checked ? 'none' : 'block';
         document.getElementById('backgroundGradientColors').style.display = this.checked ? 'block' : 'none';
       });
-      
-      // Set up toggle for frame options
-      document.getElementById('enableFrame').addEventListener('change', function() {
-        document.getElementById('frameOptions').style.display = this.checked ? 'block' : 'none';
-        // Automatically update QR code when frame is toggled
-        document.getElementById('updateQr').click();
-      });
-      
-      // Make frame options update QR code on change
-      document.getElementById('frameColor').addEventListener('change', function() {
-        document.getElementById('updateQr').click();
-      });
-      
-      document.getElementById('frameStyle').addEventListener('change', function() {
-        document.getElementById('updateQr').click();
-      });
-      
-      document.getElementById('frameWidth').addEventListener('change', function() {
-        document.getElementById('updateQr').click();
-      });
-      
-      // Make all frame-related inputs update QR when changed
-      document.getElementById('frameStyle').addEventListener('change', function() {
-        if (document.getElementById('enableFrame').checked) {
-          document.getElementById('updateQr').click();
-        }
-      });
-      
-      document.getElementById('frameColor').addEventListener('change', function() {
-        if (document.getElementById('enableFrame').checked) {
-          document.getElementById('updateQr').click();
-        }
-      });
-      
+
       // Handle custom file button
       document.getElementById('customFileButton').addEventListener('click', function() {
         document.getElementById('imageFile').click();
       });
-      
+
       // Handle file uploads
       document.getElementById('imageFile').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
           // Clear the URL input when using file upload
           document.getElementById('imageUrl').value = '';
-          
+
           // Update the file name display
           document.getElementById('fileName').textContent = file.name;
-          
+
           const reader = new FileReader();
           reader.onload = function(event) {
             // Store the data URL in a data attribute for later use
@@ -416,7 +355,7 @@
           reader.readAsDataURL(file);
         }
       });
-      
+
       // Initial QR code
       const qrCode = new QRCodeStyling({
         width: 300,
@@ -445,10 +384,10 @@
           color: "#000000"
         }
       });
-      
+
       // Display the QR code
       qrCode.append(document.getElementById("canvas"));
-      
+
       // Event handlers
       document.getElementById('updateQr').addEventListener('click', function() {
         // Get all parameters from form
@@ -467,7 +406,7 @@
         const imageMargin = parseInt(document.getElementById('imageMargin').value);
         const imageSize = parseFloat(document.getElementById('imageSize').value);
         const errorCorrectionLevel = document.getElementById('errorCorrectionLevel').value;
-        
+
         // Create options object
         const options = {
           width,
@@ -489,14 +428,14 @@
             color: cornersDotColor
           }
         };
-        
+
         // Handle dots options with gradient support
         if (document.getElementById('useDotsGradient').checked) {
           const gradientType = document.getElementById('dotsGradientType').value;
           const color1 = document.getElementById('dotsGradientColor1').value;
           const color2 = document.getElementById('dotsGradientColor2').value;
           const rotation = parseInt(document.getElementById('dotsGradientRotation').value);
-          
+
           options.dotsOptions = {
             type: dotsType,
             gradient: {
@@ -514,14 +453,14 @@
             color: dotsColor
           };
         }
-        
+
         // Handle background options with gradient support
         if (document.getElementById('useBackgroundGradient').checked) {
           const gradientType = document.getElementById('backgroundGradientType').value;
           const color1 = document.getElementById('backgroundGradientColor1').value;
           const color2 = document.getElementById('backgroundGradientColor2').value;
           const rotation = parseInt(document.getElementById('backgroundGradientRotation').value);
-          
+
           options.backgroundOptions = {
             gradient: {
               type: gradientType,
@@ -537,238 +476,114 @@
             color: backgroundColor
           };
         }
-        
+
         // Function to convert URL to data URI
-      const urlToDataURI = (url) => {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.crossOrigin = 'Anonymous';
-          
-          img.onload = function() {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            
-            const dataURI = canvas.toDataURL('image/png');
-            resolve(dataURI);
-          };
-          
-          img.onerror = function() {
-            reject(new Error('Failed to load image'));
-          };
-          
-          // Use CORS proxy if checkbox is checked
-          const useProxy = document.getElementById('useProxy').checked;
-          img.src = useProxy ? `https://cors-anywhere.herokuapp.com/${url}` : url;
-        });
-      };
-      
-      // Get uploaded file data if available
-      const fileInput = document.getElementById('imageFile');
-      const uploadedImageData = fileInput.dataset.imageData;
-      
-      // Add image options if URL is provided or file is uploaded
-      if ((imageUrl && imageUrl.trim() !== '') || uploadedImageData) {
-        // Show loading indicator in place of QR
-        const canvas = document.getElementById("canvas");
-        canvas.innerHTML = "<div style='text-align:center;padding:20px;'>Processing image...</div>";
-        
-        // If we have an uploaded file, use it directly
-        if (uploadedImageData) {
-          // Use the data URI from the uploaded file
-          options.image = uploadedImageData;
-          options.imageOptions = {
-            margin: imageMargin,
-            imageSize: imageSize,
-            hideBackgroundDots: true
-          };
-          
-          console.log("Using uploaded image");
-          
-          // Create and display QR code with data URI
-          const newQrCode = new QRCodeStyling(options);
-          canvas.innerHTML = "";
-          newQrCode.append(canvas);
-          
-          // Store for download button
-          window.currentQrCode = newQrCode;
-          
-          // Return early to prevent creating QR without image
-          return;
+        const urlToDataURI = (url) => {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+
+            img.onload = function() {
+              const canvas = document.createElement('canvas');
+              canvas.width = img.width;
+              canvas.height = img.height;
+
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0);
+
+              const dataURI = canvas.toDataURL('image/png');
+              resolve(dataURI);
+            };
+
+            img.onerror = function() {
+              reject(new Error('Failed to load image'));
+            };
+
+            // Use CORS proxy if checkbox is checked
+            const useProxy = document.getElementById('useProxy').checked;
+            img.src = useProxy ? `https://cors-anywhere.herokuapp.com/${url}` : url;
+          });
+        };
+
+        // Get uploaded file data if available
+        const fileInput = document.getElementById('imageFile');
+        const uploadedImageData = fileInput.dataset.imageData;
+
+        // Add image options if URL is provided or file is uploaded
+        if ((imageUrl && imageUrl.trim() !== '') || uploadedImageData) {
+          // Show loading indicator in place of QR
+          const canvas = document.getElementById("canvas");
+          canvas.innerHTML = "<div style='text-align:center;padding:20px;'>Processing image...</div>";
+
+          // If we have an uploaded file, use it directly
+          if (uploadedImageData) {
+            // Use the data URI from the uploaded file
+            options.image = uploadedImageData;
+            options.imageOptions = {
+              margin: imageMargin,
+              imageSize: imageSize,
+              hideBackgroundDots: true
+            };
+
+            console.log("Using uploaded image");
+
+            // Create and display QR code with data URI
+            const newQrCode = new QRCodeStyling(options);
+            canvas.innerHTML = "";
+            newQrCode.append(canvas);
+
+            // Store for download button
+            window.currentQrCode = newQrCode;
+
+            // Return early to prevent creating QR without image
+            return;
+          }
+
+          // Otherwise, convert URL to data URI
+          if (imageUrl && imageUrl.trim() !== '') {
+            urlToDataURI(imageUrl)
+              .then(dataURI => {
+                // Now use the data URI instead of URL
+                options.image = dataURI;
+                options.imageOptions = {
+                  margin: imageMargin,
+                  imageSize: imageSize,
+                  hideBackgroundDots: true
+                };
+
+                console.log("Using image as data URI");
+
+                // Create and display QR code with data URI
+                const newQrCode = new QRCodeStyling(options);
+                canvas.innerHTML = "";
+                newQrCode.append(canvas);
+
+                // Store for download button
+                window.currentQrCode = newQrCode;
+              })
+              .catch(error => {
+                console.error("Error converting image:", error);
+                canvas.innerHTML = "<div style='color:red;text-align:center;padding:20px;'>Failed to load image. Check URL and try again.</div>";
+              });
+
+            // Return early to prevent creating QR without image
+            return;
+          }
         }
-        
-        // Otherwise, convert URL to data URI
-        if (imageUrl && imageUrl.trim() !== '') {
-          urlToDataURI(imageUrl)
-            .then(dataURI => {
-              // Now use the data URI instead of URL
-              options.image = dataURI;
-              options.imageOptions = {
-                margin: imageMargin,
-                imageSize: imageSize,
-                hideBackgroundDots: true
-              };
-              
-              console.log("Using image as data URI");
-              
-              // Create and display QR code with data URI
-              const newQrCode = new QRCodeStyling(options);
-              canvas.innerHTML = "";
-              newQrCode.append(canvas);
-              
-              // Store for download button
-              window.currentQrCode = newQrCode;
-            })
-            .catch(error => {
-              console.error("Error converting image:", error);
-              canvas.innerHTML = "<div style='color:red;text-align:center;padding:20px;'>Failed to load image. Check URL and try again.</div>";
-            });
-            
-          // Return early to prevent creating QR without image
-          return;
-        }
-      }
-        
-        // Add frame if enabled
-        if (document.getElementById('enableFrame').checked) {
-          const frameColor = document.getElementById('frameColor').value;
-          const frameStyle = document.getElementById('frameStyle').value;
-          const frameWidth = parseInt(document.getElementById('frameWidth').value);
-          
-          // Store frame info in options
-          options._frameOptions = {
-            enabled: true,
-            color: frameColor,
-            style: frameStyle,
-            width: frameWidth
-          };
-          
-          // Add afterRender callback to add the frame
-          options.afterRender = function(svg) {
-            // Get namespace for SVG elements
-            const svgNS = "http://www.w3.org/2000/svg";
-            const opts = options._frameOptions;
-            
-            // Get the QR code size
-            const qrSize = parseInt(svg.getAttribute('width'));
-            const frameSize = qrSize + (opts.width * 2);
-            
-            // Save original SVG contents
-            const originalContent = svg.innerHTML;
-            
-            // Clear SVG to start fresh
-            svg.innerHTML = '';
-            
-            // Update SVG size to accommodate the frame
-            svg.setAttribute('width', frameSize);
-            svg.setAttribute('height', frameSize);
-            svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
-            
-            // Create frame element based on style
-            let frameElement;
-            
-            if (opts.style === 'rounded') {
-              frameElement = document.createElementNS(svgNS, 'rect');
-              frameElement.setAttribute('x', opts.width / 2);
-              frameElement.setAttribute('y', opts.width / 2);
-              frameElement.setAttribute('width', qrSize + opts.width);
-              frameElement.setAttribute('height', qrSize + opts.width);
-              frameElement.setAttribute('rx', opts.width * 2);
-              frameElement.setAttribute('ry', opts.width * 2);
-              frameElement.setAttribute('fill', 'none');
-              frameElement.setAttribute('stroke', opts.color);
-              frameElement.setAttribute('stroke-width', opts.width);
-            } else if (opts.style === 'dots') {
-              // Create dotted frame with individual circles
-              frameElement = document.createElementNS(svgNS, 'g');
-              
-              // Calculate number of dots per side based on frame width
-              const spacing = opts.width * 3;  // Increased spacing for better appearance
-              const dotRadius = opts.width / 1.5;  // Slightly larger dots
-              const dots = Math.floor(qrSize / spacing);
-              
-              // Draw dots on all four sides
-              for (let i = 0; i <= dots; i++) {
-                // Top edge
-                const topDot = document.createElementNS(svgNS, 'circle');
-                topDot.setAttribute('cx', opts.width + i * spacing);
-                topDot.setAttribute('cy', opts.width / 2);
-                topDot.setAttribute('r', dotRadius);
-                topDot.setAttribute('fill', opts.color);
-                frameElement.appendChild(topDot);
-                
-                // Bottom edge
-                const bottomDot = document.createElementNS(svgNS, 'circle');
-                bottomDot.setAttribute('cx', opts.width + i * spacing);
-                bottomDot.setAttribute('cy', qrSize + opts.width * 1.5);
-                bottomDot.setAttribute('r', dotRadius);
-                bottomDot.setAttribute('fill', opts.color);
-                frameElement.appendChild(bottomDot);
-                
-                // Left edge (skip corners)
-                if (i > 0 && i < dots) {
-                  const leftDot = document.createElementNS(svgNS, 'circle');
-                  leftDot.setAttribute('cx', opts.width / 2);
-                  leftDot.setAttribute('cy', opts.width + i * spacing);
-                  leftDot.setAttribute('r', dotRadius);
-                  leftDot.setAttribute('fill', opts.color);
-                  frameElement.appendChild(leftDot);
-                }
-                
-                // Right edge (skip corners)
-                if (i > 0 && i < dots) {
-                  const rightDot = document.createElementNS(svgNS, 'circle');
-                  rightDot.setAttribute('cx', qrSize + opts.width * 1.5);
-                  rightDot.setAttribute('cy', opts.width + i * spacing);
-                  rightDot.setAttribute('r', dotRadius);
-                  rightDot.setAttribute('fill', opts.color);
-                  frameElement.appendChild(rightDot);
-                }
-              }
-            } else {
-              // Default solid frame
-              frameElement = document.createElementNS(svgNS, 'rect');
-              frameElement.setAttribute('x', opts.width / 2);
-              frameElement.setAttribute('y', opts.width / 2);
-              frameElement.setAttribute('width', qrSize + opts.width);
-              frameElement.setAttribute('height', qrSize + opts.width);
-              frameElement.setAttribute('fill', 'none');
-              frameElement.setAttribute('stroke', opts.color);
-              frameElement.setAttribute('stroke-width', opts.width);
-            }
-            
-            // Create a container group for frame
-            const frameGroup = document.createElementNS(svgNS, 'g');
-            frameGroup.appendChild(frameElement);
-            
-            // Create a container group for QR content with proper translation
-            const contentGroup = document.createElementNS(svgNS, 'g');
-            contentGroup.setAttribute('transform', `translate(${opts.width}, ${opts.width})`);
-            
-            // Add the frame group to SVG first
-            svg.appendChild(frameGroup);
-            
-            // Add content group and fill with original content
-            svg.appendChild(contentGroup);
-            contentGroup.innerHTML = originalContent;
-          };
-        }
-        
+
+
         // Create new QR code with updated options
         const newQrCode = new QRCodeStyling(options);
-        
+
         // Clear previous and append new
         const canvas = document.getElementById("canvas");
         canvas.innerHTML = "";
         newQrCode.append(canvas);
-        
+
         // Store for download button
         window.currentQrCode = newQrCode;
       });
-      
+
       document.getElementById('downloadQr').addEventListener('click', function() {
         const qr = window.currentQrCode || qrCode;
         qr.download({
@@ -776,7 +591,7 @@
           name: "qr-code"
         });
       });
-      
+
       // Store for download button
       window.currentQrCode = qrCode;
     });
