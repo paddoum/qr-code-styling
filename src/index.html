@@ -246,7 +246,7 @@
       </div>
       <div class="form-group">
         <label for="useProxy">
-          <input type="checkbox" id="useProxy"> Use CORS proxy for image
+          <input type="checkbox" id="useProxy"> Use CORS proxy if direct image loading fails
         </label>
       </div>
       <div class="form-group">
@@ -480,23 +480,69 @@
           };
         }
         
-        // Add image options if URL is provided
-        if (imageUrl && imageUrl.trim() !== '') {
-          // Use a CORS proxy if the checkbox is checked
-          const useProxy = document.getElementById('useProxy').checked;
-          const finalImageUrl = useProxy ? 
-            `https://cors-anywhere.herokuapp.com/${imageUrl}` : imageUrl;
+        // Function to convert URL to data URI
+      const urlToDataURI = (url) => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'Anonymous';
           
-          options.image = finalImageUrl;
-          options.imageOptions = {
-            crossOrigin: "anonymous",
-            margin: imageMargin,
-            imageSize: imageSize,
-            hideBackgroundDots: true
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            
+            const dataURI = canvas.toDataURL('image/png');
+            resolve(dataURI);
           };
           
-          console.log("Using image URL:", finalImageUrl);
-        }
+          img.onerror = function() {
+            reject(new Error('Failed to load image'));
+          };
+          
+          // Use CORS proxy if checkbox is checked
+          const useProxy = document.getElementById('useProxy').checked;
+          img.src = useProxy ? `https://cors-anywhere.herokuapp.com/${url}` : url;
+        });
+      };
+      
+      // Add image options if URL is provided
+      if (imageUrl && imageUrl.trim() !== '') {
+        // Show loading indicator in place of QR
+        const canvas = document.getElementById("canvas");
+        canvas.innerHTML = "<div style='text-align:center;padding:20px;'>Converting image to data URI...</div>";
+        
+        // Convert URL to data URI
+        urlToDataURI(imageUrl)
+          .then(dataURI => {
+            // Now use the data URI instead of URL
+            options.image = dataURI;
+            options.imageOptions = {
+              margin: imageMargin,
+              imageSize: imageSize,
+              hideBackgroundDots: true
+            };
+            
+            console.log("Using image as data URI");
+            
+            // Create and display QR code with data URI
+            const newQrCode = new QRCodeStyling(options);
+            canvas.innerHTML = "";
+            newQrCode.append(canvas);
+            
+            // Store for download button
+            window.currentQrCode = newQrCode;
+          })
+          .catch(error => {
+            console.error("Error converting image:", error);
+            canvas.innerHTML = "<div style='color:red;text-align:center;padding:20px;'>Failed to load image. Check URL and try again.</div>";
+          });
+          
+        // Return early to prevent creating QR without image
+        return;
+      }
         
         // Add frame if enabled
         if (document.getElementById('enableFrame').checked) {
