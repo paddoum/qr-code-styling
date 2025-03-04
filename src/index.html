@@ -310,17 +310,6 @@
   <div class="preview-container">
     <h2>QR Code Preview</h2>
 
-        // Add a button to test with a specific image URL
-        document.getElementById('imageUrl').value = 'https://ar-go.co/wp-content/uploads/2020/11/macif.png';
-        
-        // Add error handling for image loading
-        window.addEventListener('error', function(e) {
-          if (e.target.tagName === 'IMG') {
-            console.error('Error loading image:', e.target.src);
-            alert('Error loading image: ' + e.target.src + '\nThis might be due to CORS restrictions.');
-          }
-        }, true);
-
     <div id="canvas"></div>
   </div>
 
