@@ -9,6 +9,10 @@ deploymentTarget = "static"
 publicDir = "src"
 
 [[ports]]
+localPort = 3000
+externalPort = 3000
+
+[[ports]]
 localPort = 8080
 externalPort = 80
 
@@ -25,4 +29,4 @@ author = 37304926
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run start"
+args = "npm install && npm start"
