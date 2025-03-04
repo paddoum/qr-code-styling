@@ -230,36 +230,7 @@
       </div>
     </div>
 
-    <div class="form-section">
-      <h3>Corners Square Options</h3>
-      <div class="form-group">
-        <label for="cornersSquareType">Type:</label>
-        <select id="cornersSquareType">
-          <option value="square" selected>Square</option>
-          <option value="dot">Dot</option>
-          <option value="extra-rounded">Extra Rounded</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="cornersSquareColor">Color:</label>
-        <input type="color" id="cornersSquareColor" value="#000000">
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Corners Dot Options</h3>
-      <div class="form-group">
-        <label for="cornersDotType">Type:</label>
-        <select id="cornersDotType">
-          <option value="square" selected>Square</option>
-          <option value="dot">Dot</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="cornersDotColor">Color:</label>
-        <input type="color" id="cornersDotColor" value="#000000">
-      </div>
-    </div>
+    
 
     <div class="form-section">
       <h3>Image Options</h3>
@@ -398,10 +369,11 @@
         const dotsType = document.getElementById('dotsType').value;
         const dotsColor = document.getElementById('dotsColor').value;
         const backgroundColor = document.getElementById('backgroundColor').value;
-        const cornersSquareType = document.getElementById('cornersSquareType').value;
-        const cornersSquareColor = document.getElementById('cornersSquareColor').value;
-        const cornersDotType = document.getElementById('cornersDotType').value;
-        const cornersDotColor = document.getElementById('cornersDotColor').value;
+        // Default values for corners instead of getting from UI
+        const cornersSquareType = "square";
+        const cornersSquareColor = "#000000";
+        const cornersDotType = "square";
+        const cornersDotColor = "#000000";
         const imageUrl = document.getElementById('imageUrl').value;
         const imageMargin = parseInt(document.getElementById('imageMargin').value);
         const imageSize = parseFloat(document.getElementById('imageSize').value);
