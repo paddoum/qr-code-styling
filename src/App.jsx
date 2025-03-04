@@ -27,6 +27,22 @@ function App() {
   const [backgroundGradientColor2, setBackgroundGradientColor2] = useState('#e9ebee');
   const [backgroundGradientRotation, setBackgroundGradientRotation] = useState(0);
   const [useProxy, setUseProxy] = useState(false);
+  // New corner square options
+  const [cornersSquareType, setCornersSquareType] = useState('square');
+  const [cornersSquareColor, setCornersSquareColor] = useState('#000000');
+  const [useCornersSquareGradient, setUseCornersSquareGradient] = useState(false);
+  const [cornersSquareGradientType, setCornersSquareGradientType] = useState('linear');
+  const [cornersSquareGradientColor1, setCornersSquareGradientColor1] = useState('#000000');
+  const [cornersSquareGradientColor2, setCornersSquareGradientColor2] = useState('#4267B2');
+  const [cornersSquareGradientRotation, setCornersSquareGradientRotation] = useState(0);
+  // New corner dot options
+  const [cornersDotType, setCornersDotType] = useState('square');
+  const [cornersDotColor, setCornersDotColor] = useState('#000000');
+  const [useCornersDotGradient, setUseCornersDotGradient] = useState(false);
+  const [cornersDotGradientType, setCornersDotGradientType] = useState('linear');
+  const [cornersDotGradientColor1, setCornersDotGradientColor1] = useState('#000000');
+  const [cornersDotGradientColor2, setCornersDotGradientColor2] = useState('#4267B2');
+  const [cornersDotGradientRotation, setCornersDotGradientRotation] = useState(0);
   
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -41,7 +57,11 @@ function App() {
     data, width, height, margin, dotsType, dotsColor, backgroundColor,
     useDotsGradient, dotsGradientType, dotsGradientColor1, dotsGradientColor2, dotsGradientRotation,
     useBackgroundGradient, backgroundGradientType, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientRotation,
-    errorCorrectionLevel
+    errorCorrectionLevel,
+    cornersSquareType, cornersSquareColor, useCornersSquareGradient, cornersSquareGradientType,
+    cornersSquareGradientColor1, cornersSquareGradientColor2, cornersSquareGradientRotation,
+    cornersDotType, cornersDotColor, useCornersDotGradient, cornersDotGradientType,
+    cornersDotGradientColor1, cornersDotGradientColor2, cornersDotGradientRotation
   ]); // Update whenever any parameter changes
 
   useEffect(() => {
@@ -109,13 +129,33 @@ function App() {
         mode: "Byte",
         errorCorrectionLevel
       },
-      cornersSquareOptions: {
-        type: "square",
-        color: "#000000"
+      cornersSquareOptions: useCornersSquareGradient ? {
+        type: cornersSquareType,
+        gradient: {
+          type: cornersSquareGradientType,
+          rotation: cornersSquareGradientRotation,
+          colorStops: [
+            { offset: 0, color: cornersSquareGradientColor1 },
+            { offset: 1, color: cornersSquareGradientColor2 }
+          ]
+        }
+      } : {
+        type: cornersSquareType,
+        color: cornersSquareColor
       },
-      cornersDotOptions: {
-        type: "square",
-        color: "#000000"
+      cornersDotOptions: useCornersDotGradient ? {
+        type: cornersDotType,
+        gradient: {
+          type: cornersDotGradientType,
+          rotation: cornersDotGradientRotation,
+          colorStops: [
+            { offset: 0, color: cornersDotGradientColor1 },
+            { offset: 1, color: cornersDotGradientColor2 }
+          ]
+        }
+      } : {
+        type: cornersDotType,
+        color: cornersDotColor
       }
     };
 
@@ -512,6 +552,185 @@ function App() {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
+        </div>
+
+        {/* Corner Square Options */}
+        <div className="mb-6 p-4 border border-gray-200 rounded-lg">
+          <h3 className="text-lg font-semibold mb-3 pb-2 border-b">Corner Square Options</h3>
+          
+          <div className="mb-4">
+            <label htmlFor="cornersSquareType" className="block font-medium mb-1">Corner Square Type:</label>
+            <select 
+              id="cornersSquareType" 
+              value={cornersSquareType} 
+              onChange={(e) => setCornersSquareType(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded"
+            >
+              <option value="square">Square</option>
+              <option value="dot">Dot</option>
+              <option value="extra-rounded">Extra Rounded</option>
+            </select>
+          </div>
+
+          <div className="mb-4 flex items-center">
+            <input 
+              type="checkbox" 
+              id="useCornersSquareGradient" 
+              checked={useCornersSquareGradient} 
+              onChange={(e) => setUseCornersSquareGradient(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="useCornersSquareGradient" className="font-medium">Use Gradient</label>
+          </div>
+
+          {!useCornersSquareGradient ? (
+            <div className="mb-4">
+              <label htmlFor="cornersSquareColor" className="block font-medium mb-1">Color:</label>
+              <input 
+                type="color" 
+                id="cornersSquareColor" 
+                value={cornersSquareColor} 
+                onChange={(e) => setCornersSquareColor(e.target.value)}
+                className="w-full h-10 p-1 border border-gray-300 rounded"
+              />
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4">
+                <label htmlFor="cornersSquareGradientType" className="block font-medium mb-1">Gradient Type:</label>
+                <select 
+                  id="cornersSquareGradientType" 
+                  value={cornersSquareGradientType} 
+                  onChange={(e) => setCornersSquareGradientType(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
+                >
+                  <option value="linear">Linear</option>
+                  <option value="radial">Radial</option>
+                </select>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="cornersSquareGradientColor1" className="block font-medium mb-1">Color 1:</label>
+                <input 
+                  type="color" 
+                  id="cornersSquareGradientColor1" 
+                  value={cornersSquareGradientColor1} 
+                  onChange={(e) => setCornersSquareGradientColor1(e.target.value)}
+                  className="w-full h-10 p-1 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="cornersSquareGradientColor2" className="block font-medium mb-1">Color 2:</label>
+                <input 
+                  type="color" 
+                  id="cornersSquareGradientColor2" 
+                  value={cornersSquareGradientColor2} 
+                  onChange={(e) => setCornersSquareGradientColor2(e.target.value)}
+                  className="w-full h-10 p-1 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="cornersSquareGradientRotation" className="block font-medium mb-1">Rotation (0-360):</label>
+                <input 
+                  type="number" 
+                  id="cornersSquareGradientRotation" 
+                  value={cornersSquareGradientRotation} 
+                  onChange={(e) => setCornersSquareGradientRotation(parseInt(e.target.value))}
+                  min="0" 
+                  max="360"
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Corner Dot Options */}
+        <div className="mb-6 p-4 border border-gray-200 rounded-lg">
+          <h3 className="text-lg font-semibold mb-3 pb-2 border-b">Corner Dot Options</h3>
+          
+          <div className="mb-4">
+            <label htmlFor="cornersDotType" className="block font-medium mb-1">Corner Dot Type:</label>
+            <select 
+              id="cornersDotType" 
+              value={cornersDotType} 
+              onChange={(e) => setCornersDotType(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded"
+            >
+              <option value="square">Square</option>
+              <option value="dot">Dot</option>
+            </select>
+          </div>
+
+          <div className="mb-4 flex items-center">
+            <input 
+              type="checkbox" 
+              id="useCornersDotGradient" 
+              checked={useCornersDotGradient} 
+              onChange={(e) => setUseCornersDotGradient(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="useCornersDotGradient" className="font-medium">Use Gradient</label>
+          </div>
+
+          {!useCornersDotGradient ? (
+            <div className="mb-4">
+              <label htmlFor="cornersDotColor" className="block font-medium mb-1">Color:</label>
+              <input 
+                type="color" 
+                id="cornersDotColor" 
+                value={cornersDotColor} 
+                onChange={(e) => setCornersDotColor(e.target.value)}
+                className="w-full h-10 p-1 border border-gray-300 rounded"
+              />
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4">
+                <label htmlFor="cornersDotGradientType" className="block font-medium mb-1">Gradient Type:</label>
+                <select 
+                  id="cornersDotGradientType" 
+                  value={cornersDotGradientType} 
+                  onChange={(e) => setCornersDotGradientType(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
+                >
+                  <option value="linear">Linear</option>
+                  <option value="radial">Radial</option>
+                </select>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="cornersDotGradientColor1" className="block font-medium mb-1">Color 1:</label>
+                <input 
+                  type="color" 
+                  id="cornersDotGradientColor1" 
+                  value={cornersDotGradientColor1} 
+                  onChange={(e) => setCornersDotGradientColor1(e.target.value)}
+                  className="w-full h-10 p-1 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="cornersDotGradientColor2" className="block font-medium mb-1">Color 2:</label>
+                <input 
+                  type="color" 
+                  id="cornersDotGradientColor2" 
+                  value={cornersDotGradientColor2} 
+                  onChange={(e) => setCornersDotGradientColor2(e.target.value)}
+                  className="w-full h-10 p-1 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="cornersDotGradientRotation" className="block font-medium mb-1">Rotation (0-360):</label>
+                <input 
+                  type="number" 
+                  id="cornersDotGradientRotation" 
+                  value={cornersDotGradientRotation} 
+                  onChange={(e) => setCornersDotGradientRotation(parseInt(e.target.value))}
+                  min="0" 
+                  max="360"
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Error Correction Level */}
