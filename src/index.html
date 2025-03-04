@@ -281,6 +281,7 @@
       </div>
       
       <div id="frameOptions" style="display: none;">
+        <p style="font-style: italic; font-size: 0.9em; margin-top: 0;">Click "Update QR Code" after changing frame options</p>
         <div class="form-group">
           <label for="frameColor">Frame Color:</label>
           <input type="color" id="frameColor" value="#000000">
@@ -483,59 +484,114 @@
             const frameStyle = document.getElementById('frameStyle').value;
             const frameWidth = parseInt(document.getElementById('frameWidth').value);
             
+            // Store frame info in options for afterRender callback
+            options._frameOptions = {
+              enabled: true,
+              color: frameColor,
+              style: frameStyle,
+              width: frameWidth
+            };
+            
             // Add SVG frame after QR code is generated
             options.afterRender = function(svg) {
-              const qrSize = width;
-              const frameSize = qrSize + (frameWidth * 2);
+              const svgNS = "http://www.w3.org/2000/svg";
+              const opts = this._frameOptions;
+              const qrSize = parseInt(svg.getAttribute('width'));
+              const frameSize = qrSize + (opts.width * 2);
               
               // Create frame element based on style
               let frameElement;
-              if (frameStyle === 'rounded') {
-                frameElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                frameElement.setAttribute('x', 0);
-                frameElement.setAttribute('y', 0);
-                frameElement.setAttribute('width', frameSize);
-                frameElement.setAttribute('height', frameSize);
-                frameElement.setAttribute('rx', frameWidth * 2);
-                frameElement.setAttribute('ry', frameWidth * 2);
-              } else if (frameStyle === 'dots') {
-                frameElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const path = `M ${frameWidth} 0 H ${frameSize - frameWidth} 
-                              M ${frameSize} ${frameWidth} V ${frameSize - frameWidth}
-                              M ${frameSize - frameWidth} ${frameSize} H ${frameWidth}
-                              M 0 ${frameSize - frameWidth} V ${frameWidth}`;
-                frameElement.setAttribute('d', path);
-                frameElement.setAttribute('stroke-width', frameWidth);
-                frameElement.setAttribute('stroke-dasharray', `${frameWidth} ${frameWidth}`);
-                frameElement.setAttribute('stroke-linecap', 'round');
+              
+              if (opts.style === 'rounded') {
+                frameElement = document.createElementNS(svgNS, 'rect');
+                frameElement.setAttribute('x', opts.width / 2);
+                frameElement.setAttribute('y', opts.width / 2);
+                frameElement.setAttribute('width', qrSize + opts.width);
+                frameElement.setAttribute('height', qrSize + opts.width);
+                frameElement.setAttribute('rx', opts.width * 2);
+                frameElement.setAttribute('ry', opts.width * 2);
                 frameElement.setAttribute('fill', 'none');
-                frameElement.setAttribute('stroke', frameColor);
+                frameElement.setAttribute('stroke', opts.color);
+                frameElement.setAttribute('stroke-width', opts.width);
+              } else if (opts.style === 'dots') {
+                // Create dotted frame with individual circles
+                const container = document.createElementNS(svgNS, 'g');
+                
+                // Calculate number of dots per side based on frame width
+                const spacing = opts.width * 2;
+                const dotRadius = opts.width / 2;
+                const dots = Math.floor(qrSize / spacing);
+                
+                // Draw dots on all four sides
+                for (let i = 0; i <= dots; i++) {
+                  // Top edge
+                  const topDot = document.createElementNS(svgNS, 'circle');
+                  topDot.setAttribute('cx', opts.width + i * spacing);
+                  topDot.setAttribute('cy', opts.width / 2);
+                  topDot.setAttribute('r', dotRadius);
+                  topDot.setAttribute('fill', opts.color);
+                  container.appendChild(topDot);
+                  
+                  // Bottom edge
+                  const bottomDot = document.createElementNS(svgNS, 'circle');
+                  bottomDot.setAttribute('cx', opts.width + i * spacing);
+                  bottomDot.setAttribute('cy', qrSize + opts.width * 1.5);
+                  bottomDot.setAttribute('r', dotRadius);
+                  bottomDot.setAttribute('fill', opts.color);
+                  container.appendChild(bottomDot);
+                  
+                  // Left edge (skip corners)
+                  if (i > 0 && i < dots) {
+                    const leftDot = document.createElementNS(svgNS, 'circle');
+                    leftDot.setAttribute('cx', opts.width / 2);
+                    leftDot.setAttribute('cy', opts.width + i * spacing);
+                    leftDot.setAttribute('r', dotRadius);
+                    leftDot.setAttribute('fill', opts.color);
+                    container.appendChild(leftDot);
+                  }
+                  
+                  // Right edge (skip corners)
+                  if (i > 0 && i < dots) {
+                    const rightDot = document.createElementNS(svgNS, 'circle');
+                    rightDot.setAttribute('cx', qrSize + opts.width * 1.5);
+                    rightDot.setAttribute('cy', opts.width + i * spacing);
+                    rightDot.setAttribute('r', dotRadius);
+                    rightDot.setAttribute('fill', opts.color);
+                    container.appendChild(rightDot);
+                  }
+                }
+                
+                frameElement = container;
               } else {
                 // Default solid frame
-                frameElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                frameElement.setAttribute('x', 0);
-                frameElement.setAttribute('y', 0);
-                frameElement.setAttribute('width', frameSize);
-                frameElement.setAttribute('height', frameSize);
-              }
-              
-              if (frameStyle !== 'dots') {
+                frameElement = document.createElementNS(svgNS, 'rect');
+                frameElement.setAttribute('x', opts.width / 2);
+                frameElement.setAttribute('y', opts.width / 2);
+                frameElement.setAttribute('width', qrSize + opts.width);
+                frameElement.setAttribute('height', qrSize + opts.width);
                 frameElement.setAttribute('fill', 'none');
-                frameElement.setAttribute('stroke', frameColor);
-                frameElement.setAttribute('stroke-width', frameWidth * 2);
+                frameElement.setAttribute('stroke', opts.color);
+                frameElement.setAttribute('stroke-width', opts.width);
               }
               
-              // Insert frame before QR code elements so it appears behind
-              svg.insertBefore(frameElement, svg.firstChild);
+              // Create a wrapper group for proper positioning
+              const wrapper = document.createElementNS(svgNS, 'g');
               
-              // Adjust the position of the QR code to center it in the frame
-              const qrGroup = svg.querySelector('g') || svg.lastChild;
-              qrGroup.setAttribute('transform', `translate(${frameWidth}, ${frameWidth})`);
+              // Move existing content into the wrapper
+              while (svg.firstChild) {
+                wrapper.appendChild(svg.firstChild);
+              }
               
-              // Update SVG viewBox to include the frame
-              svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
+              // Add the frame as the first child in the wrapper
+              wrapper.insertBefore(frameElement, wrapper.firstChild);
+              
+              // Add wrapper back to SVG
+              svg.appendChild(wrapper);
+              
+              // Update SVG size to accommodate the frame
               svg.setAttribute('width', frameSize);
               svg.setAttribute('height', frameSize);
+              svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
             };
           }
           
