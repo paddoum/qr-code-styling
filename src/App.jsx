@@ -237,10 +237,12 @@ function App() {
     }
   };
 
-  const downloadQrCode = () => {
+  const downloadQrCode = (format = 'svg') => {
     if (qrCode) {
+      // Note: webp is used as a workaround for PDF since qr-code-styling 
+      // doesn't directly support PDF format
       qrCode.download({
-        extension: "svg",
+        extension: format,
         name: "qr-code"
       });
     }
@@ -759,9 +761,24 @@ function App() {
         
         <div ref={canvasRef} className="inline-block"></div>
         
-        <div className="mt-6">
+        <div className="mt-6 flex flex-col items-center">
+          <div className="mb-3">
+            <select 
+              id="downloadFormat" 
+              className="p-2 border border-gray-300 rounded"
+              defaultValue="svg"
+            >
+              <option value="svg">SVG</option>
+              <option value="png">PNG</option>
+              <option value="jpeg">JPG</option>
+              <option value="webp">PDF</option>
+            </select>
+          </div>
           <button 
-            onClick={downloadQrCode}
+            onClick={(e) => {
+              const format = document.getElementById('downloadFormat').value;
+              downloadQrCode(format);
+            }}
             className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded"
           >
             Download QR Code
