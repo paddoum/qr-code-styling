@@ -542,12 +542,6 @@ function App() {
         
         <div className="mt-6">
           <button 
-            onClick={updateQrCode}
-            className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded mr-3"
-          >
-            Update QR Code
-          </button>
-          <button 
             onClick={downloadQrCode}
             className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded"
           >
