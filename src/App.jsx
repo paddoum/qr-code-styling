@@ -37,7 +37,12 @@ function App() {
     
     // Clean up if needed
     return () => {};
-  }, []); // Initialize once
+  }, [
+    data, width, height, margin, dotsType, dotsColor, backgroundColor,
+    useDotsGradient, dotsGradientType, dotsGradientColor1, dotsGradientColor2, dotsGradientRotation,
+    useBackgroundGradient, backgroundGradientType, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientRotation,
+    errorCorrectionLevel
+  ]); // Update whenever any parameter changes
 
   useEffect(() => {
     if (qrCode && canvasRef.current) {
