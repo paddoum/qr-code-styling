@@ -32,72 +32,11 @@ function App() {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    const qrCodeOptions = {
-      width,
-      height,
-      type: "svg",
-      data,
-      margin,
-      qrOptions: {
-        typeNumber: 0,
-        mode: "Byte",
-        errorCorrectionLevel
-      },
-      cornersSquareOptions: {
-        type: "square",
-        color: "#000000"
-      },
-      cornersDotOptions: {
-        type: "square",
-        color: "#000000"
-      }
-    };
-
-    // Handle dots options with gradient support
-    if (useDotsGradient) {
-      qrCodeOptions.dotsOptions = {
-        type: dotsType,
-        gradient: {
-          type: dotsGradientType,
-          rotation: dotsGradientRotation,
-          colorStops: [
-            { offset: 0, color: dotsGradientColor1 },
-            { offset: 1, color: dotsGradientColor2 }
-          ]
-        }
-      };
-    } else {
-      qrCodeOptions.dotsOptions = {
-        type: dotsType,
-        color: dotsColor
-      };
-    }
-
-    // Handle background options with gradient support
-    if (useBackgroundGradient) {
-      qrCodeOptions.backgroundOptions = {
-        gradient: {
-          type: backgroundGradientType,
-          rotation: backgroundGradientRotation,
-          colorStops: [
-            { offset: 0, color: backgroundGradientColor1 },
-            { offset: 1, color: backgroundGradientColor2 }
-          ]
-        }
-      };
-    } else {
-      qrCodeOptions.backgroundOptions = {
-        color: backgroundColor
-      };
-    }
-
-    // Initialize QR code
-    const newQrCode = new QRCodeStyling(qrCodeOptions);
-    setQrCode(newQrCode);
-
-    return () => {
-      // Clean up if needed
-    };
+    // Initialize QR code on component mount
+    updateQrCode();
+    
+    // Clean up if needed
+    return () => {};
   }, []); // Initialize once
 
   useEffect(() => {
@@ -150,6 +89,9 @@ function App() {
 
   const updateQrCode = async (imageData = null) => {
     if (!canvasRef.current) return;
+    
+    // Show loading indicator
+    canvasRef.current.innerHTML = "<div class='text-center p-5'>Generating QR code...</div>";
 
     const options = {
       width,
@@ -210,40 +152,44 @@ function App() {
       };
     }
 
-    // Handle image if provided
-    if (imageData) {
-      options.image = imageData;
-      options.imageOptions = {
-        margin: imageMargin,
-        imageSize: imageSize,
-        hideBackgroundDots: true
-      };
-    } else if (imageUrl && imageUrl.trim() !== '') {
-      try {
-        canvasRef.current.innerHTML = "<div class='text-center p-5'>Processing image...</div>";
-        const dataURI = await urlToDataURI(imageUrl);
-        options.image = dataURI;
+    try {
+      // Handle image if provided
+      if (imageData) {
+        options.image = imageData;
         options.imageOptions = {
           margin: imageMargin,
           imageSize: imageSize,
           hideBackgroundDots: true
         };
-      } catch (error) {
-        console.error("Error converting image:", error);
-        canvasRef.current.innerHTML = "<div class='text-red-500 text-center p-5'>Failed to load image. Check URL and try again.</div>";
-        return;
+      } else if (imageUrl && imageUrl.trim() !== '') {
+        try {
+          const dataURI = await urlToDataURI(imageUrl);
+          options.image = dataURI;
+          options.imageOptions = {
+            margin: imageMargin,
+            imageSize: imageSize,
+            hideBackgroundDots: true
+          };
+        } catch (error) {
+          console.error("Error converting image:", error);
+          canvasRef.current.innerHTML = "<div class='text-red-500 text-center p-5'>Failed to load image. Check URL and try again.</div>";
+          return;
+        }
       }
-    }
 
-    // Create new QR code with updated options
-    const newQrCode = new QRCodeStyling(options);
-    
-    // Clear previous and append new
-    canvasRef.current.innerHTML = "";
-    newQrCode.append(canvasRef.current);
-    
-    // Store for download
-    setQrCode(newQrCode);
+      // Create new QR code with updated options
+      const newQrCode = new QRCodeStyling(options);
+      
+      // Clear previous and append new
+      canvasRef.current.innerHTML = "";
+      newQrCode.append(canvasRef.current);
+      
+      // Store for download
+      setQrCode(newQrCode);
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+      canvasRef.current.innerHTML = "<div class='text-red-500 text-center p-5'>Error generating QR code. Please check your settings.</div>";
+    }
   };
 
   const downloadQrCode = () => {
