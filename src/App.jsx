@@ -771,7 +771,7 @@ function App() {
               <option value="svg">SVG</option>
               <option value="png">PNG</option>
               <option value="jpeg">JPG</option>
-              <option value="webp">PDF</option>
+              <option value="webp">WEBP</option>
             </select>
           </div>
           <button 
