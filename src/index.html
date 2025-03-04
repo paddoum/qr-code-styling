@@ -134,16 +134,76 @@
       </div>
       
       <div class="form-group">
-        <label for="dotsColor">Color:</label>
-        <input type="color" id="dotsColor" value="#000000">
+        <label class="checkbox-label">
+          <input type="checkbox" id="useDotsGradient"> Use Gradient
+        </label>
+      </div>
+      
+      <div id="dotsSolidColor">
+        <div class="form-group">
+          <label for="dotsColor">Color:</label>
+          <input type="color" id="dotsColor" value="#000000">
+        </div>
+      </div>
+      
+      <div id="dotsGradientColors" style="display: none;">
+        <div class="form-group">
+          <label for="dotsGradientType">Gradient Type:</label>
+          <select id="dotsGradientType">
+            <option value="linear">Linear</option>
+            <option value="radial">Radial</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="dotsGradientColor1">Color 1:</label>
+          <input type="color" id="dotsGradientColor1" value="#000000">
+        </div>
+        <div class="form-group">
+          <label for="dotsGradientColor2">Color 2:</label>
+          <input type="color" id="dotsGradientColor2" value="#4267B2">
+        </div>
+        <div class="form-group">
+          <label for="dotsGradientRotation">Rotation (0-360):</label>
+          <input type="number" id="dotsGradientRotation" value="0" min="0" max="360">
+        </div>
       </div>
     </div>
     
     <div class="form-section">
       <h3>Background Options</h3>
       <div class="form-group">
-        <label for="backgroundColor">Color:</label>
-        <input type="color" id="backgroundColor" value="#ffffff">
+        <label class="checkbox-label">
+          <input type="checkbox" id="useBackgroundGradient"> Use Gradient
+        </label>
+      </div>
+      
+      <div id="backgroundSolidColor">
+        <div class="form-group">
+          <label for="backgroundColor">Color:</label>
+          <input type="color" id="backgroundColor" value="#ffffff">
+        </div>
+      </div>
+      
+      <div id="backgroundGradientColors" style="display: none;">
+        <div class="form-group">
+          <label for="backgroundGradientType">Gradient Type:</label>
+          <select id="backgroundGradientType">
+            <option value="linear">Linear</option>
+            <option value="radial">Radial</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="backgroundGradientColor1">Color 1:</label>
+          <input type="color" id="backgroundGradientColor1" value="#ffffff">
+        </div>
+        <div class="form-group">
+          <label for="backgroundGradientColor2">Color 2:</label>
+          <input type="color" id="backgroundGradientColor2" value="#e9ebee">
+        </div>
+        <div class="form-group">
+          <label for="backgroundGradientRotation">Rotation (0-360):</label>
+          <input type="number" id="backgroundGradientRotation" value="0" min="0" max="360">
+        </div>
       </div>
     </div>
     
@@ -213,6 +273,34 @@
     </div>
     
     <div class="form-section">
+      <h3>Frame Options</h3>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="enableFrame"> Add Frame to QR Code
+        </label>
+      </div>
+      
+      <div id="frameOptions" style="display: none;">
+        <div class="form-group">
+          <label for="frameColor">Frame Color:</label>
+          <input type="color" id="frameColor" value="#000000">
+        </div>
+        <div class="form-group">
+          <label for="frameStyle">Frame Style:</label>
+          <select id="frameStyle">
+            <option value="solid">Solid</option>
+            <option value="rounded">Rounded</option>
+            <option value="dots">Dots</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="frameWidth">Frame Width:</label>
+          <input type="number" id="frameWidth" value="5" min="1" max="20">
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-section">
       <h3>Controls</h3>
       <button id="updateQr">Update QR Code</button>
       <button id="downloadQr">Download QR Code</button>
@@ -243,6 +331,22 @@
       script.src = 'https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js';
       script.onload = initQR;
       document.head.appendChild(script);
+      
+      // Set up toggle for gradient options
+      document.getElementById('useDotsGradient').addEventListener('change', function() {
+        document.getElementById('dotsSolidColor').style.display = this.checked ? 'none' : 'block';
+        document.getElementById('dotsGradientColors').style.display = this.checked ? 'block' : 'none';
+      });
+      
+      document.getElementById('useBackgroundGradient').addEventListener('change', function() {
+        document.getElementById('backgroundSolidColor').style.display = this.checked ? 'none' : 'block';
+        document.getElementById('backgroundGradientColors').style.display = this.checked ? 'block' : 'none';
+      });
+      
+      // Set up toggle for frame options
+      document.getElementById('enableFrame').addEventListener('change', function() {
+        document.getElementById('frameOptions').style.display = this.checked ? 'block' : 'none';
+      });
       
       function initQR() {
         // Initial QR code
@@ -308,13 +412,6 @@
               mode: "Byte",
               errorCorrectionLevel
             },
-            dotsOptions: {
-              type: dotsType,
-              color: dotsColor
-            },
-            backgroundOptions: {
-              color: backgroundColor
-            },
             cornersSquareOptions: {
               type: cornersSquareType,
               color: cornersSquareColor
@@ -324,6 +421,54 @@
               color: cornersDotColor
             }
           };
+          
+          // Handle dots options with gradient support
+          if (document.getElementById('useDotsGradient').checked) {
+            const gradientType = document.getElementById('dotsGradientType').value;
+            const color1 = document.getElementById('dotsGradientColor1').value;
+            const color2 = document.getElementById('dotsGradientColor2').value;
+            const rotation = parseInt(document.getElementById('dotsGradientRotation').value);
+            
+            options.dotsOptions = {
+              type: dotsType,
+              gradient: {
+                type: gradientType,
+                rotation,
+                colorStops: [
+                  { offset: 0, color: color1 },
+                  { offset: 1, color: color2 }
+                ]
+              }
+            };
+          } else {
+            options.dotsOptions = {
+              type: dotsType,
+              color: dotsColor
+            };
+          }
+          
+          // Handle background options with gradient support
+          if (document.getElementById('useBackgroundGradient').checked) {
+            const gradientType = document.getElementById('backgroundGradientType').value;
+            const color1 = document.getElementById('backgroundGradientColor1').value;
+            const color2 = document.getElementById('backgroundGradientColor2').value;
+            const rotation = parseInt(document.getElementById('backgroundGradientRotation').value);
+            
+            options.backgroundOptions = {
+              gradient: {
+                type: gradientType,
+                rotation,
+                colorStops: [
+                  { offset: 0, color: color1 },
+                  { offset: 1, color: color2 }
+                ]
+              }
+            };
+          } else {
+            options.backgroundOptions = {
+              color: backgroundColor
+            };
+          }
           
           // Add image options if URL is provided
           if (imageUrl && imageUrl.trim() !== '') {
@@ -341,6 +486,68 @@
             };
             
             console.log("Using image URL:", finalImageUrl);
+          }
+          
+          // Add frame if enabled
+          if (document.getElementById('enableFrame').checked) {
+            const frameColor = document.getElementById('frameColor').value;
+            const frameStyle = document.getElementById('frameStyle').value;
+            const frameWidth = parseInt(document.getElementById('frameWidth').value);
+            
+            // Add SVG frame after QR code is generated
+            options.afterRender = function(svg) {
+              const qrSize = width;
+              const frameSize = qrSize + (frameWidth * 2);
+              
+              // Create frame element based on style
+              let frameElement;
+              if (frameStyle === 'rounded') {
+                frameElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                frameElement.setAttribute('x', 0);
+                frameElement.setAttribute('y', 0);
+                frameElement.setAttribute('width', frameSize);
+                frameElement.setAttribute('height', frameSize);
+                frameElement.setAttribute('rx', frameWidth * 2);
+                frameElement.setAttribute('ry', frameWidth * 2);
+              } else if (frameStyle === 'dots') {
+                frameElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const path = `M ${frameWidth} 0 H ${frameSize - frameWidth} 
+                              M ${frameSize} ${frameWidth} V ${frameSize - frameWidth}
+                              M ${frameSize - frameWidth} ${frameSize} H ${frameWidth}
+                              M 0 ${frameSize - frameWidth} V ${frameWidth}`;
+                frameElement.setAttribute('d', path);
+                frameElement.setAttribute('stroke-width', frameWidth);
+                frameElement.setAttribute('stroke-dasharray', `${frameWidth} ${frameWidth}`);
+                frameElement.setAttribute('stroke-linecap', 'round');
+                frameElement.setAttribute('fill', 'none');
+                frameElement.setAttribute('stroke', frameColor);
+              } else {
+                // Default solid frame
+                frameElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                frameElement.setAttribute('x', 0);
+                frameElement.setAttribute('y', 0);
+                frameElement.setAttribute('width', frameSize);
+                frameElement.setAttribute('height', frameSize);
+              }
+              
+              if (frameStyle !== 'dots') {
+                frameElement.setAttribute('fill', 'none');
+                frameElement.setAttribute('stroke', frameColor);
+                frameElement.setAttribute('stroke-width', frameWidth * 2);
+              }
+              
+              // Insert frame before QR code elements so it appears behind
+              svg.insertBefore(frameElement, svg.firstChild);
+              
+              // Adjust the position of the QR code to center it in the frame
+              const qrGroup = svg.querySelector('g') || svg.lastChild;
+              qrGroup.setAttribute('transform', `translate(${frameWidth}, ${frameWidth})`);
+              
+              // Update SVG viewBox to include the frame
+              svg.setAttribute('viewBox', `0 0 ${frameSize} ${frameSize}`);
+              svg.setAttribute('width', frameSize);
+              svg.setAttribute('height', frameSize);
+            };
           }
           
           // For debugging image loading issues
