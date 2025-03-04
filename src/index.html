@@ -90,6 +90,30 @@
       height: 100px;
       font-family: monospace;
     }
+    
+    .custom-file-upload {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+    
+    .custom-file-upload input[type="file"] {
+      display: none;
+    }
+    
+    .custom-file-upload button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    
+    #fileName {
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -246,7 +270,11 @@
       </div>
       <div class="form-group">
         <label>OR Upload Local Image:</label>
-        <input type="file" id="imageFile" accept="image/*" style="border:none;">
+        <div class="custom-file-upload">
+          <input type="file" id="imageFile" accept="image/*">
+          <button type="button" id="customFileButton">Choose File</button>
+          <span id="fileName">No file chosen</span>
+        </div>
       </div>
       <div class="form-group">
         <label for="useProxy">
@@ -363,12 +391,20 @@
         }
       });
       
+      // Handle custom file button
+      document.getElementById('customFileButton').addEventListener('click', function() {
+        document.getElementById('imageFile').click();
+      });
+      
       // Handle file uploads
       document.getElementById('imageFile').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
           // Clear the URL input when using file upload
           document.getElementById('imageUrl').value = '';
+          
+          // Update the file name display
+          document.getElementById('fileName').textContent = file.name;
           
           const reader = new FileReader();
           reader.onload = function(event) {
