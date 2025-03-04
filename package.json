@@ -11,6 +11,8 @@
     "node": ">=18.18.0"
   },
   "dependencies": {
+    "globals": "^16.0.0",
+    "qr-code-styling": "^1.9.1",
     "qrcode-generator": "^1.4.4"
   },
   "devDependencies": {
