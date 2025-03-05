@@ -647,7 +647,7 @@ export default function App() {
         </div>
         
         <footer className="mt-8 text-center text-gray-600">
-          <p>Powered by <a href="https://github.com/kozakdenys/qr-code-styling" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">QR Code Styling</a></p>
+          <p>Powered by <a href="https://ar-go.co" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">ARGO</a></p>
         </footer>
       </div>
     </div>
