@@ -64,12 +64,7 @@ export default function App() {
     
     // Clean up if needed
     return () => {};
-  }, [
-    data, width, height, margin, dotsType, dotsColor, backgroundColor,
-    useDotsGradient, dotsGradientType, dotsGradientColor1, dotsGradientColor2, dotsGradientRotation,
-    useBackgroundGradient, backgroundGradientType, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientRotation,
-    errorCorrectionLevel
-  ]); // Update whenever any parameter changes
+  }, []);
 
   useEffect(() => {
     if (qrCode && canvasRef.current) {
@@ -144,7 +139,6 @@ export default function App() {
           };
 
           // Use CORS proxy if checkbox is checked
-          console.log("Using image URL:", useProxy ? `https://cors-anywhere.herokuapp.com/${url}` : url);
           img.src = useProxy ? `https://cors-anywhere.herokuapp.com/${url}` : url;
         });
       };
@@ -225,6 +219,12 @@ export default function App() {
     return options;
   };
 
+  const updateQrCode = () => {
+    const options = createQrCodeOptions();
+    const newQrCode = new QRCodeStyling(options);
+    setQrCode(newQrCode);
+  };
+
   // Handle file upload button click
   const handleFileButtonClick = () => {
     fileInputRef.current.click();
@@ -243,14 +243,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <div className="container mx-auto">
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">QR Code Generator</h1>
         
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <div className="md:flex">
             {/* Left Side - Controls */}
-            <div className="md:w-2/3 p-4 md:p-6 overflow-y-auto max-h-[80vh] scrollbar-thin">
+            <div className="md:w-2/3 p-4 overflow-y-auto max-h-[80vh]">
               {/* Basic Options */}
               <div className="mb-6">
                 <h2 className="text-xl font-semibold border-b pb-2 mb-4">Basic Options</h2>
@@ -259,7 +259,7 @@ export default function App() {
                   <label htmlFor="data" className="block text-gray-700 font-medium mb-1">QR Code Content</label>
                   <textarea 
                     id="data" 
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border rounded"
                     value={data}
                     onChange={(e) => setData(e.target.value)}
                     rows="3"
@@ -272,7 +272,7 @@ export default function App() {
                     <input 
                       type="number" 
                       id="width" 
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border rounded"
                       value={width}
                       onChange={(e) => setWidth(parseInt(e.target.value))}
                       min="100"
@@ -285,7 +285,7 @@ export default function App() {
                     <input 
                       type="number" 
                       id="height" 
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border rounded"
                       value={height}
                       onChange={(e) => setHeight(parseInt(e.target.value))}
                       min="100"
@@ -298,7 +298,7 @@ export default function App() {
                     <input 
                       type="number" 
                       id="margin" 
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border rounded"
                       value={margin}
                       onChange={(e) => setMargin(parseInt(e.target.value))}
                       min="0"
@@ -316,7 +316,7 @@ export default function App() {
                   <label htmlFor="dotsType" className="block text-gray-700 font-medium mb-1">Dots Type</label>
                   <select 
                     id="dotsType" 
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border rounded"
                     value={dotsType}
                     onChange={(e) => setDotsType(e.target.value)}
                   >
@@ -358,7 +358,7 @@ export default function App() {
                       <label htmlFor="dotsGradientType" className="block text-gray-700 font-medium mb-1">Gradient Type</label>
                       <select 
                         id="dotsGradientType" 
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-2 border rounded"
                         value={dotsGradientType}
                         onChange={(e) => setDotsGradientType(e.target.value)}
                       >
@@ -372,7 +372,7 @@ export default function App() {
                       <input 
                         type="number" 
                         id="dotsGradientRotation" 
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-2 border rounded"
                         value={dotsGradientRotation}
                         onChange={(e) => setDotsGradientRotation(parseInt(e.target.value))}
                         min="0"
@@ -438,7 +438,7 @@ export default function App() {
                       <label htmlFor="backgroundGradientType" className="block text-gray-700 font-medium mb-1">Gradient Type</label>
                       <select 
                         id="backgroundGradientType" 
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-2 border rounded"
                         value={backgroundGradientType}
                         onChange={(e) => setBackgroundGradientType(e.target.value)}
                       >
@@ -452,7 +452,7 @@ export default function App() {
                       <input 
                         type="number" 
                         id="backgroundGradientRotation" 
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-2 border rounded"
                         value={backgroundGradientRotation}
                         onChange={(e) => setBackgroundGradientRotation(parseInt(e.target.value))}
                         min="0"
@@ -495,7 +495,7 @@ export default function App() {
                     <input 
                       type="text" 
                       id="imageUrl" 
-                      className="flex-grow p-2 border rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="flex-grow p-2 border rounded-l"
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
                       placeholder="https://example.com/logo.png"
@@ -559,7 +559,7 @@ export default function App() {
                     <input 
                       type="number" 
                       id="imageMargin" 
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border rounded"
                       value={imageMargin}
                       onChange={(e) => setImageMargin(parseInt(e.target.value))}
                       min="0"
@@ -572,7 +572,7 @@ export default function App() {
                     <input 
                       type="number" 
                       id="imageSize" 
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border rounded"
                       value={imageSize}
                       onChange={(e) => setImageSize(parseFloat(e.target.value))}
                       min="0.0"
@@ -591,7 +591,7 @@ export default function App() {
                   <label htmlFor="errorCorrectionLevel" className="block text-gray-700 font-medium mb-1">Level</label>
                   <select 
                     id="errorCorrectionLevel" 
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border rounded"
                     value={errorCorrectionLevel}
                     onChange={(e) => setErrorCorrectionLevel(e.target.value)}
                   >
@@ -602,10 +602,17 @@ export default function App() {
                   </select>
                 </div>
               </div>
+              
+              <button 
+                onClick={updateQrCode}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded mb-4 w-full"
+              >
+                Update QR Code
+              </button>
             </div>
             
             {/* Right Side - Preview */}
-            <div className="md:w-1/3 bg-gray-100 p-4 md:p-6 flex flex-col items-center justify-center">
+            <div className="md:w-1/3 bg-gray-100 p-4 flex flex-col items-center justify-center">
               <h2 className="text-xl font-semibold mb-6">QR Code Preview</h2>
               
               <div ref={canvasRef} className="bg-white p-4 rounded shadow-md inline-block"></div>
@@ -628,7 +635,7 @@ export default function App() {
                     const format = document.getElementById('downloadFormat').value;
                     downloadQrCode(format);
                   }}
-                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded"
+                  className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded"
                 >
                   Download QR Code
                 </button>
@@ -636,6 +643,10 @@ export default function App() {
             </div>
           </div>
         </div>
+        
+        <footer className="mt-8 text-center text-gray-600">
+          <p>Powered by <a href="https://github.com/kozakdenys/qr-code-styling" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">QR Code Styling</a></p>
+        </footer>
       </div>
     </div>
   );
