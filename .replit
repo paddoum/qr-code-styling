@@ -26,7 +26,7 @@ localPort = 8081
 externalPort = 8081
 
 [workflows]
-runButton = "Run React App"
+runButton = "Start Dev Server"
 
 [[workflows.workflow]]
 name = "Run"
@@ -38,6 +38,14 @@ args = "npm install && npm start"
 
 [[workflows.workflow]]
 name = "Run React App"
+author = 37304926
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm start"
+
+[[workflows.workflow]]
+name = "Start Dev Server"
 author = 37304926
 
 [[workflows.workflow.tasks]]
