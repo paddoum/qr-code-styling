@@ -603,13 +603,7 @@ export default function App() {
                 </div>
               </div>
               
-              <button 
-                onClick={updateQrCode}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded mb-4 w-full"
-              >
-                Update QR Code
-              </button>
-            </div>
+              </div>
             
             {/* Right Side - Preview */}
             <div className="md:w-1/3 bg-gray-100 p-4 flex flex-col items-center justify-center">
@@ -630,15 +624,23 @@ export default function App() {
                     <option value="webp">WEBP</option>
                   </select>
                 </div>
-                <button 
-                  onClick={(e) => {
-                    const format = document.getElementById('downloadFormat').value;
-                    downloadQrCode(format);
-                  }}
-                  className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded"
-                >
-                  Download QR Code
-                </button>
+                <div className="flex space-x-3">
+                  <button 
+                    onClick={updateQrCode}
+                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded"
+                  >
+                    Update QR Code
+                  </button>
+                  <button 
+                    onClick={(e) => {
+                      const format = document.getElementById('downloadFormat').value;
+                      downloadQrCode(format);
+                    }}
+                    className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded"
+                  >
+                    Download QR Code
+                  </button>
+                </div>
               </div>
             </div>
           </div>
