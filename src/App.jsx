@@ -4,7 +4,7 @@ import QRCodeStyling from 'qr-code-styling';
 
 export default function App() {
   const [qrCode, setQrCode] = useState(null);
-  const [data, setData] = useState('https://replit.com');
+  const [data, setData] = useState('https://ar-go.co');
   const [width, setWidth] = useState(300);
   const [height, setHeight] = useState(300);
   const [margin, setMargin] = useState(10);
